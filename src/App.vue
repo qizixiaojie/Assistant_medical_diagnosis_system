@@ -2,7 +2,10 @@
   <div class="container">
     <!-- 顶部组件 -->
     <Hospital_top />
-    <div class="content">21111</div>
+    <div class="content">
+      <!-- 展示路由组件 -->
+      <router-view></router-view>
+    </div>
     <Hospital_bottom />
   </div>
 </template>
