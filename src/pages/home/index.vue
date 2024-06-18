@@ -20,7 +20,9 @@
         <!-- 分页器 -->
         <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" :background="true" layout=" prev, pager, next, jumper,-> ,sizes,total" :total="totalHospital" @current-change="currentChange" @size-change="sizeChange" />
       </el-col>
-      <el-col :span="4">4</el-col>
+      <el-col :span="4">
+        <Tip />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -36,6 +38,8 @@ import Level from './level/index.vue'
 import Region from './region/index.vue'
 // 引入医院结构信息卡片
 import Card from './card/index.vue'
+// 引入右侧结构
+import Tip from './tip/index.vue'
 // 约束放回数据类型
 import type { Content, HospitalResponseData } from '@/api/home/type.ts'
 // 引入获取数据api函数

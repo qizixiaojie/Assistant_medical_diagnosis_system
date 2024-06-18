@@ -5,11 +5,11 @@
         <div class="hospital_name">{{ hospitalInfo.hosname }}</div>
         <div class="tip">
           <div class="level">
-            <img src="@/assets/images/赞.png" style="width: 16px" />
+            <img src="@/assets/images/home_赞.png" style="width: 16px" />
             <span>{{ hospitalInfo.param.hostypeString }}</span>
           </div>
           <div class="time">
-            <img src="@/assets/images/闹钟.png" style="width: 16px" />
+            <img src="@/assets/images/home_闹钟.png" style="width: 16px" />
             <span>每天{{ hospitalInfo.bookingRule?.releaseTime }}放号</span>
           </div>
         </div>
