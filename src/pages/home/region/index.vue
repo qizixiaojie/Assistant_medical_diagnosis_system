@@ -4,7 +4,7 @@
       <div class="left">地区:</div>
       <ul>
         <li :class="{ active: RegionFlag == '' }">全部</li>
-        <li v-for="item in RegionArr" :key="item.value" :class="{ active: RegionFlag == item.value }" @click="changeRegion (item.value)">{{ item.name }}</li>
+        <li v-for="item in RegionArr" :key="item.value" :class="{ active: RegionFlag == item.value }" @click="changeRegion(item.value)">{{ item.name }}</li>
       </ul>
     </div>
   </div>
@@ -31,9 +31,13 @@ const getRegion = async () => {
 //定义相应数据的高亮
 const RegionFlag = ref('')
 //定义点击的函数
-const changeRegion  = (item: string) => {
+// 并将地区数据传递给父亲
+const changeRegion = (item: string) => {
   RegionFlag.value = item
+  //将数据传递给父亲
+  $emit('getRegion', item)
 }
+const $emit = defineEmits(['getRegion'])
 </script>
 
 <script lang="ts">

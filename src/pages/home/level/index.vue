@@ -33,8 +33,11 @@ const getLevel = async () => {
 let activeFlag = ref<string>('')
 
 //点击等级按钮的回调
+//并且将等级回调给父亲
+const $emit = defineEmits(['getLevel'])
 const changeLevel = (level: string) => {
   activeFlag.value = level
+  $emit('getLevel', level)
 }
 </script>
 

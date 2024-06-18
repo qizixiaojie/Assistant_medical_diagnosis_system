@@ -9,9 +9,9 @@
     <el-row :gutter="gutternum">
       <el-col :span="20">
         <!-- 等级 -->
-        <Level />
+        <Level @getLevel="getLevel" />
         <!-- 地区 -->
-        <Region />
+        <Region @getRegion="getRegion" />
         <!-- 展示医院结构 -->
         <div class="hospital">
           <Card class="item" v-for="(item, index) in hasHospitalArr" :key="index" :hospitalInfo="item" />
@@ -55,16 +55,20 @@ const pageSize = ref<number>(10)
 const hasHospitalArr = ref<Content>([])
 // 存储医院的总个数
 const totalHospital = ref<number>(0)
+// 存储医院等级相应数据
+const hostype = ref<string>('')
+// 存储医院地址相应数据
+const districtCode = ref<string>('')
 
 //获取hospital数据
 const getHospitalInfo = async () => {
   //获取医院的数据：默认第一页，一页十个医院的数据
-  const result: HospitalResponseData = await reqHospital(pageNo.value, pageSize.value)
+  const result: HospitalResponseData = await reqHospital(pageNo.value, pageSize.value, hostype.value, districtCode.value)
   if (result.code == 200) {
     console.log(result)
     //存储已有的医院数据
-    hasHospitalArr.value = result.data.content
-    totalHospital.value = result.data.totalElements
+    hasHospitalArr.value = result.data.content //总数据
+    totalHospital.value = result.data.totalElements //总共多少条
   }
 }
 
@@ -77,6 +81,22 @@ const sizeChange = () => {
   //当前页面归为第一页
   pageNo.value = 1
   // 获当前页面数据
+  getHospitalInfo()
+}
+
+//子组件通信获取子组件的传递过来的等级
+const getLevel = (level: string) => {
+  // 更改等级
+  hostype.value = level
+  //重新获取数据
+  getHospitalInfo()
+}
+
+//子组件获取子组件传递过来的地区
+const getRegion=(region:string)=>{
+  //更改地区
+  districtCode.value=region
+  //重新获取数据
   getHospitalInfo()
 }
 </script>
