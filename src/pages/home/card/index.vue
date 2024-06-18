@@ -2,26 +2,29 @@
   <el-card class="box-card" shadow="hover">
     <div class="content">
       <div class="left">
-        <div class="hospital_name">北京医院</div>
+        <div class="hospital_name">{{ hospitalInfo.hosname }}</div>
         <div class="tip">
           <div class="level">
             <img src="@/assets/images/赞.png" style="width: 16px" />
-            <span>三级甲等</span>
+            <span>{{ hospitalInfo.param.hostypeString }}</span>
           </div>
           <div class="time">
             <img src="@/assets/images/闹钟.png" style="width: 16px" />
-            <span>2023</span>
+            <span>每天{{ hospitalInfo.bookingRule?.releaseTime }}放号</span>
           </div>
         </div>
       </div>
       <div class="right">
-        <img src="@/assets/images/log.png" alt="" />
+        <img :src="`data:image/jpeg;base64,${hospitalInfo.logoData}`" alt="" />
       </div>
     </div>
   </el-card>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+//接受父组件传过来的props-》已有的医院数据
+defineProps(['hospitalInfo'])
+</script>
 
 <style scoped lang="scss">
 .content {
