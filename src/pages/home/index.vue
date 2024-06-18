@@ -35,6 +35,8 @@ import Level from './level/index.vue'
 import Region from './region/index.vue'
 // 引入医院结构信息卡片
 import Card from './card/index.vue'
+// 约束放回数据类型
+import type { Content, HospitalResponseData } from '@/api/home/type.ts'
 // 引入获取数据api函数
 import { reqHospital } from '@/api/home/index.ts'
 import { ref, onMounted } from 'vue'
@@ -48,16 +50,18 @@ const gutternum = ref<number>(20)
 const pageNo = ref<number>(1)
 //一页展示几条数据
 const pageSize = ref<number>(10)
+//
 // 存储医院已有的数据
-const hasHospitalArr = ref([])
+const hasHospitalArr = ref<Content>([])
 // 存储医院的总个数
-const totalHospital = ref(0)
+const totalHospital = ref<number>(0)
 
 //获取hospital数据
 const getHospitalInfo = async () => {
   //获取医院的数据：默认第一页，一页十个医院的数据
-  const result: any = await reqHospital(pageNo.value, pageSize.value)
+  const result: HospitalResponseData = await reqHospital(pageNo.value, pageSize.value)
   if (result.code == 200) {
+    console.log(result)
     //存储已有的医院数据
     hasHospitalArr.value = result.data.content
     totalHospital.value = result.data.totalElements
