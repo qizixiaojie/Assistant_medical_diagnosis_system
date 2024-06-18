@@ -13,9 +13,10 @@
         <!-- 地区 -->
         <Region @getRegion="getRegion" />
         <!-- 展示医院结构 -->
-        <div class="hospital">
+        <div class="hospital" v-if="hasHospitalArr.length > 0">
           <Card class="item" v-for="(item, index) in hasHospitalArr" :key="index" :hospitalInfo="item" />
         </div>
+        <el-empty v-else description="没有医院" />
         <!-- 分页器 -->
         <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" :background="true" layout=" prev, pager, next, jumper,-> ,sizes,total" :total="totalHospital" @current-change="currentChange" @size-change="sizeChange" />
       </el-col>
@@ -93,9 +94,9 @@ const getLevel = (level: string) => {
 }
 
 //子组件获取子组件传递过来的地区
-const getRegion=(region:string)=>{
+const getRegion = (region: string) => {
   //更改地区
-  districtCode.value=region
+  districtCode.value = region
   //重新获取数据
   getHospitalInfo()
 }
