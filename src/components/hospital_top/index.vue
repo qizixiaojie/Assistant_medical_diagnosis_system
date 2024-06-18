@@ -2,7 +2,7 @@
   <div class="top">
     <div class="content">
       <!-- 左侧 -->
-      <div class="left">
+      <div class="left" @click="goHome">
         <img src="@/assets/images/log.png" alt="" />
         <p>柒子诊所 线上助诊平台</p>
       </div>
@@ -15,7 +15,15 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const $router = useRouter()
+//去往首页
+const goHome = () => {
+  $router.push({ path: '/home' })
+}
+</script>
 
 <style scoped lang="scss">
 .top {
@@ -36,6 +44,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
       img {
         margin-right: 10px;
         width: 50px;
