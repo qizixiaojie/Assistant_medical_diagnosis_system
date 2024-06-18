@@ -5,7 +5,7 @@
     <!-- 首页搜索表单区域 -->
     <Search />
     <!-- 底部展示医院的结构 -->
-    <el-row gutter="20">
+    <el-row :gutter="gutternum">
       <el-col :span="20">
         <!-- 等级 -->
         <Level />
@@ -36,6 +36,8 @@ import Region from './region/index.vue'
 import Card from './card/index.vue'
 
 import { ref } from 'vue'
+
+const gutternum=ref<number>(20)
 
 //分页器需要的数据
 //分页器的页码
