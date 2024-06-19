@@ -12,7 +12,7 @@
     <!-- 展示内容区域 -->
     <div class="content">
       <div class="left">
-        <img :src="`data:image/jpeg;base64,` + hospitalStore.hospitalInfo.hospital?.logoData" alt="" />
+        <img :src="`data:image/jpeg;base64,` + hospitalStore.hospitalInfo.hospital?.logoData" />
       </div>
       <div class="right">
         <div class="rule">挂号规则</div>
@@ -83,7 +83,7 @@ const hospitalStore = useDetailStore()
         font-size: 12px;
         display: flex;
         justify-content: space-between;
-        width: 890px;
+        width: 840px;
         span {
           span {
             color: #b1a9a9;
