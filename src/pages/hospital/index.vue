@@ -65,6 +65,7 @@ const changeActive = (path: string) => {
 const detailStore = useDetailStore()
 //获取信息函数
 const getDetial = async () => {
+  // 这里改成了any
   await detailStore.getHospital($route.query.hoscode)
 }
 </script>
@@ -87,6 +88,7 @@ const getDetial = async () => {
     }
     .el-menu {
       .el-menu-item {
+        margin-top: 20px;
         .span::after {
           content: '';
           top: 24px;

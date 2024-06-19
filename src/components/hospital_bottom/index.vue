@@ -22,7 +22,7 @@
   height: 50px;
   display: flex;
   justify-content: center;
-  background-color: rgb(227, 226, 226);
+  background-color: #fafafa;
   .content {
     width: 1200px;
     height: 100%;

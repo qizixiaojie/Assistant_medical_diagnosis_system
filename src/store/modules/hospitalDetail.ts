@@ -3,14 +3,16 @@ import { defineStore } from 'pinia'
 import { reqHospitalDetail } from "@/api/hospital/index.ts"
 
 //获取请求约束ts类型
-import { HospitalDetail } from '@/api/hospital/type.ts'
+import type { HospitalDetail } from '@/api/hospital/type.ts'
+import type { DetailState } from "./interface/index.ts"
+import type { HosPitalDetail } from "@/api/hospital/type";
 //pinia组合式api
 
 const useDetailStore = defineStore('Detail', {
-  state: () => {
+  state: (): DetailState => {
     return {
       //医院详情的数据
-      hospitalInfo: {}
+      hospitalInfo: ({} as HosPitalDetail)
     }
   },
   actions: {
