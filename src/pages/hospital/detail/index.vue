@@ -10,8 +10,8 @@
     </div>
     <!-- 医院的logo和路线 -->
     <div class="logo">
-      <div class="left">
-        <img :src="`data:image/jpeg;base64,` + hospitalStore.hospitalInfo.hospital?.logoData" />
+      <div class="left" v-if="hospitalStore.hospitalInfo.hospital?.logoData">
+        <img :src="`data:image/jpeg;base64,${hospitalStore.hospitalInfo.hospital?.logoData}`" />
       </div>
       <div class="right">
         <div class="address">

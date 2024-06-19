@@ -49,8 +49,8 @@ const $router = useRouter()
 const $route = useRoute()
 
 onMounted(() => {
-  isActive.value = $route.path
-  getDetial()
+  getHospitalDetial()
+  getDeparmentDetail()
 })
 
 //路由跳转事件
@@ -63,10 +63,13 @@ const changeActive = (path: string) => {
 
 //组件挂载完毕，通知pinia仓库发请求获取医院详情的数据，存储在仓库中
 const detailStore = useDetailStore()
-//获取信息函数
-const getDetial = async () => {
-  // 这里改成了any
+//获取医院详情信息的数据
+const getHospitalDetial = async () => {
   await detailStore.getHospital($route.query.hoscode as string)
+}
+//获取某一个医院科室的数据
+const getDeparmentDetail = async () => {
+  await detailStore.getDeparment($route.query.hoscode as string)
 }
 </script>
 
