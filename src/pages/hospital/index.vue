@@ -57,7 +57,7 @@ onMounted(() => {
 //为路由添加样式
 const isActive = ref('')
 const changeActive = (path: string) => {
-  $router.push({ path: `${path}` })
+  $router.push({ path: `${path}`, query: { hoscode: $route.query.hoscode } })
   isActive.value = path
 }
 
@@ -66,7 +66,7 @@ const detailStore = useDetailStore()
 //获取信息函数
 const getDetial = async () => {
   // 这里改成了any
-  await detailStore.getHospital($route.query.hoscode)
+  await detailStore.getHospital($route.query.hoscode as string)
 }
 </script>
 
