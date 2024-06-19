@@ -3,7 +3,7 @@
     <div class="deparment">
       <div class="header">
         <div class="left">
-          <img src="@/assets/images/home_全部科室.png" style="width: 16px" />
+          <img src="@/assets/images/home_全部科室.png" style="width: 20px" />
           <span style="letter-spacing: 1px; font-weight: 700; color: #333; font-size: 16px">常见科室</span>
         </div>
         <div class="right">
@@ -27,7 +27,7 @@
     <div class="notice">
       <div class="header">
         <div class="left">
-          <img src="@/assets/images/home_云平台.png" />
+          <img src="@/assets/images/home_云平台.png" style="width: 20px" />
           <span style="letter-spacing: 1px; font-weight: 700; color: #333; font-size: 16px">停诊公告</span>
         </div>
         <div class="right">
@@ -46,7 +46,7 @@
     <div class="notice">
       <div class="header">
         <div class="left">
-          <img src="@/assets/images/home_停诊信息.png" />
+          <img src="@/assets/images/home_停诊信息.png" style="width: 20px" />
           <span style="letter-spacing: 1px; font-weight: 700; color: #333; font-size: 16px">平台公告</span>
         </div>
         <div class="right">

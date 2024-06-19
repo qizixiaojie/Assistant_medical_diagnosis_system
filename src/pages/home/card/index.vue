@@ -29,9 +29,9 @@ const props = defineProps(['hospitalInfo'])
 //进行路由跳转到详情页面
 const $router = useRouter()
 const goDetail = () => {
-  console.log(props.hospitalInfo)
+  console.log(props.hospitalInfo.hoscode)
 
-  $router.push({ path: '/hospital/register' })
+  $router.push({ path: '/hospital/register', query: { hoscode: props.hospitalInfo.hoscode } })
 }
 </script>
 

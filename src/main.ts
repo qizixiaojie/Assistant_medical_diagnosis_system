@@ -21,12 +21,17 @@ import 'element-plus/dist/index.css'
 //国际化语言
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
+//引入pinia仓库
+import pinia from '@/store'
+
 //利用createApp方法创建应用实例，且将应用实例挂载到，静态index.html挂载点
 const app = createApp(App)
 app.component('Hospital_top', Hospital_top)
 app.component('Hospital_bottom', Hospital_bottom)
 //安装路由插件
 app.use(router)
+//安装仓库
+app.use(pinia)
 //安装element-plus
 app.use(ElementPlus, {
   locale: zhCn,
