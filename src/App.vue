@@ -10,8 +10,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .container {
@@ -22,7 +21,6 @@
     margin-top: 70px;
     width: 1200px;
     min-height: 700px;
-    background-color: rgb(16, 121, 121);
   }
 }
 </style>

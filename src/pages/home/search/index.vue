@@ -35,7 +35,7 @@ const fetchData = async (keyword: string, cb: any) => {
 //点击某一个选项
 const getDetail = (item: any) => {
   //点击搜索到的项目进入详情页面，将来需要携带query参数（医院的编码）
-  $router.push({ path: '/hospital' })
+  $router.push({ path: '/hospital/register' })
 }
 </script>
 
