@@ -47,7 +47,7 @@
           <h1 class="cur">{{ deparment.depname }}</h1>
           <!-- 每一个大的科室下小科室 -->
           <ul>
-            <li @click="showLogin(item)" v-for="item in deparment.children" :key="item.depcode">
+            <li @click="showLogin()" v-for="item in deparment.children" :key="item.depcode">
               {{ item.depname }}
             </li>
           </ul>
@@ -59,33 +59,28 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
 //引入医院详情仓库的数据
 import useDetailStore from '@/store/modules/hospitalDetail'
 let hospitalStore = useDetailStore()
-//获取路由器
-let $router = useRouter()
-//获取路由对象
-let $route = useRoute()
+//获取user仓库下面的数据visable，可以控制Login组件的对话框
+import useUserStore from '@/store/modules/interface/user'
+const userStore = useUserStore()
 //控制科室高亮的响应式数据
 let currentIndex = ref<number>(0)
 //左侧大的科室点击的事件
 const changeIndex = (index: number) => {
   currentIndex.value = index
   //点击导航获取右侧科室(大的科室H1标题)
-  const  allH1 = document.querySelectorAll('.cur')
+  const allH1 = document.querySelectorAll('.cur')
   //滚动到对应科室的位置
   allH1[currentIndex.value].scrollIntoView({
     behavior: 'smooth', //过渡动画效果
     block: 'start' //滚动到位置 默认起始位置
   })
 }
-//点击科室按钮回调
-//item:即为用户选中科室的数据
-const showLogin = (item: any) => {
-  //点击某一个医院科室按钮，进入到相应的预约挂号详情页面
-  //跳转到预约挂号详情页面
-  $router.push({ path: '/hospital/register_step1', query: { hoscode: $route.query.hoscode, depcode: item.depcode } })
+//点击科室按钮回调,显示登录弹窗
+const showLogin = () => {
+  userStore.visable = true
 }
 </script>
 

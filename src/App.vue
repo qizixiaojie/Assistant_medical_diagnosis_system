@@ -7,6 +7,8 @@
       <router-view></router-view>
     </div>
     <Hospital_bottom />
+    <!-- 登录组件 -->
+    <Login />
   </div>
 </template>
 
