@@ -6,7 +6,7 @@
         <!-- 左侧节后：收集号码登录，微信扫一扫登录 -->
         <el-col :span="12">
           <div class="login">
-            <div v-show="scene == 0">
+            <div v-show="scene == 1">
               <el-form :model="isFormData" :rules="isFormRules" ref="formRef">
                 <el-form-item prop="isPhone">
                   <el-input style="margin-top: 30px" placeholder="请输入您的手机号码" :prefix-icon="User" v-model="isFormData.isPhone"></el-input>
@@ -15,7 +15,7 @@
                   <el-input placeholder="请输入您的手机验证码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isFormData.code"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button style="margin-top: 20px" @click="validateForm(formRef)" :disabled="isDisabled">获取验证码</el-button>
+                  <el-button style="margin-top: 20px" @click="validateForm(formRef)" :disabled="isDisabled">获取验证码{{ countDown }}</el-button>
                 </el-form-item>
               </el-form>
               <div class="bottom">
@@ -26,7 +26,11 @@
                 </div>
               </div>
             </div>
-            <div class="webchat" v-show="scene == 1">微信扫码denglu</div>
+
+            <div class="webchat" v-show="scene == 0" style="text-align: center">
+              <img src="@/assets/images/二维码_登入.png" />
+              <p style="color: #b1a9a9; cursor: pointer" @click="infoLogin">短信 登录</p>
+            </div>
           </div>
         </el-col>
         <el-col :span="12">
@@ -69,10 +73,13 @@ import { ElMessage } from 'element-plus'
 const userStore = useUserStore()
 
 //控制微信扫码登录的
-const scene = ref<number>(0) //0代表收集号码登录  如果是1 微信扫码登录
+const scene = ref<number>(1) //0代表收集号码登录  如果是1 微信扫码登录
 
 //点击微信扫码登录|微信小图标切换为微信扫码登录
 const changeScene = () => {
+  scene.value = 0
+}
+const infoLogin = () => {
   scene.value = 1
 }
 
@@ -93,11 +100,12 @@ const isFormRules = reactive({
 
 const formRef = ref() //获取表单，鉴定是否符合数据
 const isDisabled = ref(false) //限定获取验证码按钮
+const countDown = ref('') //控制倒计时
 //触发鉴定函数
 const validateForm = (formRef: any) => {
   formRef.validate((valid: any) => {
     if (valid) {
-      getCode()
+      countDown_F() //触发倒计时函数
     } else {
       isDisabled.value = true
       ElMessage({
@@ -114,8 +122,6 @@ const validateForm = (formRef: any) => {
 
 //获取验证码
 const getCode = async () => {
-  console.log(isFormData.isPhone + '这是组件')
-
   //通知pinia仓库存储验证码
   try {
     //成功
@@ -123,6 +129,32 @@ const getCode = async () => {
     isFormData.code = userStore.code
   } catch (error) {
     //失败
+  }
+}
+//触发倒计时函数
+const control = ref<boolean>(false) // 初始时不阻止点击
+const countDown_F = () => {
+  const time = ref<number>(60)
+  if (!control.value) {
+    // 只有在 control 为 false 时才执行倒计时
+    getCode() //获取验证码函数
+    control.value = true // 阻止再次点击
+    const TimeId = setInterval(() => {
+      time.value -= 1
+      countDown.value = `(${time.value})`
+      if (time.value <= 0) {
+        // 假设我们想在时间到 0 时停止
+        clearInterval(TimeId)
+        countDown.value = ''
+        time.value = 60
+        control.value = false // 允许再次点击
+      }
+    }, 1000)
+  } else {
+    ElMessage({
+      message: '不可重复点击获取函数',
+      type: 'error'
+    })
   }
 }
 </script>

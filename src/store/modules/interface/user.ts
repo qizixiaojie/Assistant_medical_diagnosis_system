@@ -2,7 +2,6 @@
 import { defineStore } from 'pinia'
 //引入获取验证码的请求方法
 import { reqCode } from '@/api/hospital';
-import { ElMessage } from 'element-plus';
 
 const useUserStore = defineStore('User', {
   state: () => {
@@ -17,18 +16,10 @@ const useUserStore = defineStore('User', {
       const result: any = await reqCode(phone)
       console.log(result)
       if (result.code == 200) {
-        ElMessage({
-          message: '获取验证码成功',
-          type: 'success'
-        })
         this.code = result.data//赋值
         return 'ok'
       }
       else {
-        ElMessage({
-          message: '获取验证码失败',
-          type: 'error'
-        })
         return Promise.reject(new Error(result.message))
       }
 

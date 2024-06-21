@@ -8,7 +8,9 @@ enum API {
   //获取某个一个医院的科室的数据
   HOSPITALDEPARMENT_URL = '/hosp/hospital/department/',
   //获取验证码接口
-  GETUSERCODE_URL = '/sms/send/'
+  GETUSERCODE_URL = '/sms/send/',
+  //用户登录接口
+  USERLOGIN_URL = '/user/login'
 
 }
 
@@ -21,3 +23,6 @@ export const reqHospitalDeparment = (hoscode: string) => request.get<any, Deparm
 
 //获取验证码接口
 export const reqCode = (phone: string) => request.get<any, any>(API.GETUSERCODE_URL + phone)
+
+//用户登录接口
+export const reqUserLogin=(data:any)=>request.post(API.USERLOGIN_URL,data)
