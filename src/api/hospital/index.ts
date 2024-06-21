@@ -6,7 +6,10 @@ import type { HospitalDetail, DeparmentResponseData } from './type.ts'
 enum API {
   HOSPITALDETAIL_URL = '/hosp/hospital/',
   //获取某个一个医院的科室的数据
-  HOSPITALDEPARMENT_URL = '/hosp/hospital/department/'
+  HOSPITALDEPARMENT_URL = '/hosp/hospital/department/',
+  //获取验证码接口
+  GETUSERCODE_URL = '/sms/send/'
+
 }
 
 //获取医院详情的接口
@@ -15,3 +18,6 @@ export const reqHospitalDetail = (hoscode: string) => request.get<any, HospitalD
 
 // 获取医院科室的接口
 export const reqHospitalDeparment = (hoscode: string) => request.get<any, DeparmentResponseData>(API.HOSPITALDEPARMENT_URL + hoscode)
+
+//获取验证码接口
+export const reqCode = (phone: string) => request.get<any, any>(API.GETUSERCODE_URL + phone)

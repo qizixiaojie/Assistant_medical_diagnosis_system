@@ -30,12 +30,13 @@ const app = createApp(App)
 app.component('Hospital_top', Hospital_top)
 app.component('Hospital_bottom', Hospital_bottom)
 app.component('Login', Login)
-//安装路由插件
-app.use(router)
-//安装仓库
-app.use(pinia)
 //安装element-plus
 app.use(ElementPlus, {
   locale: zhCn,
 })
+//安装路由插件
+app.use(router)
+//安装仓库
+app.use(pinia)
+
 app.mount("#app")
