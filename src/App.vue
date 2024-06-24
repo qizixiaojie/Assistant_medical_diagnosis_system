@@ -8,11 +8,15 @@
     </div>
     <Hospital_bottom />
     <!-- 登录组件 -->
-    <Login />
+    <Login v-if="userStore.visable" />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+//引入用户仓库
+import useUserStore from './store/modules/interface/user'
+const userStore = useUserStore()
+</script>
 
 <style scoped lang="scss">
 .container {

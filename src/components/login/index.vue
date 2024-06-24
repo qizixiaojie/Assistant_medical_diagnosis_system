@@ -1,6 +1,6 @@
 <template>
   <div class="login_container">
-    <el-dialog v-model="userStore.visable" title="用户登录" width="500">
+    <el-dialog v-model="userStore.visable" title="用户登录" width="500" @close="close">
       <!-- 对话框进行规划 -->
       <el-row>
         <!-- 左侧节后：收集号码登录，微信扫一扫登录 -->
@@ -211,6 +211,15 @@ const login = async () => {
       message: (error as Error).message
     })
   }
+}
+
+//对话框关闭的回调函数
+//关闭窗口的回调函数，直接在@click函数中
+const close = () => {
+  // 清空收集的数据
+  Object.assign(isFormData, { phone: '', code: '' })
+  //清除上一次的校验结果
+  formRef.value.resetFields()
 }
 </script>
 <script lang="ts">
