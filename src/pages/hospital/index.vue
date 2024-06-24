@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 //左侧的小图标
-import { Document, Menu as IconMenu, Location, Setting, InfoFilled, Search, HomeFilled } from '@element-plus/icons-vue'
+import { Document, Menu as IconMenu, Setting, InfoFilled, Search, HomeFilled } from '@element-plus/icons-vue'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useDetailStore from '@/store/modules/hospitalDetail.ts'

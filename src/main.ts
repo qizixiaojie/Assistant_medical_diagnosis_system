@@ -24,6 +24,8 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 //引入pinia仓库
 import pinia from '@/store'
+//引入pinia持久化插件
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 //利用createApp方法创建应用实例，且将应用实例挂载到，静态index.html挂载点
 const app = createApp(App)
@@ -38,5 +40,7 @@ app.use(ElementPlus, {
 app.use(router)
 //安装仓库
 app.use(pinia)
+//持久化仓库
+pinia.use(piniaPluginPersistedstate)
 
 app.mount("#app")

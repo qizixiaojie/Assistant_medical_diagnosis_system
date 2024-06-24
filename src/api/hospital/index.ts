@@ -1,6 +1,6 @@
 //引入二次封装的axios
 import request from "@/utils/request";
-import type { HospitalDetail, DeparmentResponseData } from './type.ts'
+import type { HospitalDetail, DeparmentResponseData, LoginData, UserLoginResponseData } from './type.ts'
 
 //枚举请求地址
 enum API {
@@ -25,4 +25,4 @@ export const reqHospitalDeparment = (hoscode: string) => request.get<any, Deparm
 export const reqCode = (phone: string) => request.get<any, any>(API.GETUSERCODE_URL + phone)
 
 //用户登录接口
-export const reqUserLogin=(data:any)=>request.post(API.USERLOGIN_URL,data)
+export const reqUserLogin = (data: LoginData) => request.post<any, UserLoginResponseData>(API.USERLOGIN_URL, data)
