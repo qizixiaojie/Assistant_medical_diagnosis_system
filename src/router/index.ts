@@ -34,6 +34,10 @@ export default createRouter({
         {
           path: 'search',
           component: () => import('@/pages/hospital/search/index.vue')
+        },
+        {
+          path:'register_setupOne',
+          component: () => import('@/pages/hospital/register/register_setpOne.vue')
         }
       ]
     },

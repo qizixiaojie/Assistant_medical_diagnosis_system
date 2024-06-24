@@ -58,7 +58,9 @@ onMounted(() => {
 const isActive = ref('')
 const changeActive = (path: string) => {
   $router.push({ path: `${path}`, query: { hoscode: $route.query.hoscode } })
+  detailStore.isActived = path
   isActive.value = path
+
 }
 
 //组件挂载完毕，通知pinia仓库发请求获取医院详情的数据，存储在仓库中
@@ -90,6 +92,7 @@ const getDeparmentDetail = async () => {
       margin-right: 20px;
     }
     .el-menu {
+      border-right: none;
       .el-menu-item {
         margin-top: 20px;
         .span::after {

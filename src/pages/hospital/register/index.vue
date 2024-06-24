@@ -47,7 +47,7 @@
           <h1 class="cur">{{ deparment.depname }}</h1>
           <!-- 每一个大的科室下小科室 -->
           <ul>
-            <li @click="showLogin()" v-for="item in deparment.children" :key="item.depcode">
+            <li @click="showLogin(item)" v-for="item in deparment.children" :key="item.depcode">
               {{ item.depname }}
             </li>
           </ul>
@@ -59,12 +59,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 //引入医院详情仓库的数据
 import useDetailStore from '@/store/modules/hospitalDetail'
 let hospitalStore = useDetailStore()
-//获取user仓库下面的数据visable，可以控制Login组件的对话框
-import useUserStore from '@/store/modules/interface/user'
-const userStore = useUserStore()
+
 //控制科室高亮的响应式数据
 let currentIndex = ref<number>(0)
 //左侧大的科室点击的事件
@@ -78,9 +77,16 @@ const changeIndex = (index: number) => {
     block: 'start' //滚动到位置 默认起始位置
   })
 }
-//点击科室按钮回调,显示登录弹窗
-const showLogin = () => {
-  userStore.visable = true
+//点击科室按钮回调,跳转到预约挂号的详情页
+//item用户选择的医院信息
+const $router = useRouter()
+const $route = useRoute()
+const showLogin = (item: any) => {
+  //点击某一个医院科室按钮，进入到相应的预约挂号详情页面
+  $router.push({
+     path: '/hospital/register_setupOne' ,
+     query:{hoscode:$route.query.hoscode,depcode:$route.query.depcode}
+    })
 }
 </script>
 
