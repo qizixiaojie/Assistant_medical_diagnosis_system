@@ -32,8 +32,14 @@ const useUserStore = defineStore('User', {
       const result: UserLoginResponseData = await reqUserLogin(isFormData)
       if (result.code == 200) {
         this.userInfo = result.data
+      } else {
+        alert('手机登录失败')
       }
-
+    },
+    //退出登录方法
+    loginout() {
+      this.userInfo = {} as UserInfo
+      localStorage.removeItem('userInfo')
     }
   },
   getters: {},

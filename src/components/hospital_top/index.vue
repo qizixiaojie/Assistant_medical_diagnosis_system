@@ -25,7 +25,7 @@
                 <el-dropdown-item>实名认证</el-dropdown-item>
                 <el-dropdown-item>挂号订单</el-dropdown-item>
                 <el-dropdown-item>就诊人管理</el-dropdown-item>
-                <el-dropdown-item>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="loginOut">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -51,6 +51,14 @@ const goHome = () => {
 //点击登录与注册按钮的时候弹出对话框
 const login = () => {
   userStore.visable = true
+}
+
+//退出登录按钮的回调函数
+const loginOut = () => {
+  //清除用户信息
+  userStore.loginout()
+  //编程式导航路由到首页
+  $router.push({ path: '/home' })
 }
 </script>
 
