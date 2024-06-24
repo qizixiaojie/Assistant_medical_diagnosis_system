@@ -11,7 +11,7 @@
                 <el-form-item prop="phone">
                   <el-input style="margin-top: 30px" placeholder="请输入您的手机号码" :prefix-icon="User" v-model="isFormData.phone"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="code">
                   <el-input placeholder="请输入您的手机验证码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isFormData.code"></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -19,7 +19,7 @@
                 </el-form-item>
               </el-form>
               <div class="bottom">
-                <el-button style="width: 100%" type="primary" szie="default" :disabled="UserLogin" @click="login">用户登录</el-button>
+                <el-button style="width: 100%" type="primary" szie="default" :disabled="UserLogin" @click="login()">用户登录</el-button>
                 <div @click="changeScene">
                   <img src="@/assets/images/user_微信.png" style="width: 32px" />
                   <p>微信扫码登录</p>
@@ -96,14 +96,18 @@ const isFormData = reactive({
   phone: '', //收集收集号码
   code: '' //收集验证码
 })
-//定制表当校验规则
+//定制校验表单规则
 const isFormRules = reactive({
   phone: [
     // 只保留必要的规则，并且修改 message 以反映其目的
-    { required: true, message: '请输入手机号码', trigger: 'blur' },
+    { required: true, message: '请输入11位手机号码', trigger: 'blur' },
     // 保持手机号码格式验证规则不变，但修改 message 以反映验证失败的情况
     { pattern: /^1[3-9]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' } // 添加了 trigger 属性
-  ]
+  ] /*
+  code: [
+    { required: true, message: '请输入6位验证码', trigger: 'blur' },
+    { pattern: /^\d{6}$/, message: '验证码格式不正确', trigger: 'blur' }
+  ]*/
 })
 
 const formRef = ref() //获取表单，鉴定是否符合数据
