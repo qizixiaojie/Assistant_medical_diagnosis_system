@@ -11,8 +11,8 @@
                 <el-form-item prop="phone">
                   <el-input style="margin-top: 30px" placeholder="请输入您的手机号码" :prefix-icon="User" v-model="isFormData.phone"></el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                  <el-input placeholder="请输入您的手机验证码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isFormData.code"></el-input>
+                <el-form-item>
+                  <el-input placeholder="请输入您的手机验证码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isFormData.code" @change="ChangeCode(isFormData.code)"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button style="margin-top: 20px" @click="validateForm(formRef)" :disabled="isDisabled">获取验证码{{ countDown }}</el-button>
@@ -103,11 +103,12 @@ const isFormRules = reactive({
     { required: true, message: '请输入11位手机号码', trigger: 'blur' },
     // 保持手机号码格式验证规则不变，但修改 message 以反映验证失败的情况
     { pattern: /^1[3-9]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' } // 添加了 trigger 属性
-  ] /*
-  code: [
-    { required: true, message: '请输入6位验证码', trigger: 'blur' },
-    { pattern: /^\d{6}$/, message: '验证码格式不正确', trigger: 'blur' }
-  ]*/
+  ]
+
+  // code: [
+  //   { required: true, message: '请输入6位验证码', trigger: 'blur' },
+  //   { pattern: /^\d{6}$/, message: '验证码格式不正确', trigger: 'blur' }
+  // ]
 })
 
 const formRef = ref() //获取表单，鉴定是否符合数据
@@ -138,6 +139,7 @@ const getCode = async () => {
   try {
     //成功
     await userStore.getCode(isFormData.phone)
+    Setcode.value = userStore.code
     isFormData.code = userStore.code
   } catch (error) {
     //失败
@@ -173,6 +175,21 @@ const countDown_F = () => {
       message: `不可重复点击获取数据，并在${time.value}之内输入验证码`,
       type: 'error'
     })
+  }
+}
+
+//将验证码存储
+const Setcode = ref('')
+//优化，如果获取的验证码被改变，进行提示并且改进
+const ChangeCode = (code: string) => {
+  if (code == Setcode.value) {
+    UserLogin.value = false
+  } else {
+    ElMessage({
+      type: 'error',
+      message: `您输入的六位验证码不正确，正确的验证码是：${Setcode.value},请重新输入`
+    })
+    UserLogin.value = true
   }
 }
 
