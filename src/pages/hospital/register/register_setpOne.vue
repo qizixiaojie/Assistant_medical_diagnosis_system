@@ -12,7 +12,7 @@
     <div class="center">
       <h1>{{ workData.baseMap?.workDateString }}</h1>
       <div class="container">
-        <div class="item" :class="{ active: item.status == -1 || item.availableNumber == -1 }" v-for="item in workData.bookingScheduleList" :key="item">
+        <div class="item" :class="{ active: item.status == -1 || item.availableNumber == -1, cur: item.workDate == workTime.workDate }" v-for="item in workData.bookingScheduleList" :key="item" @click="changeTime(item)">
           <div class="tops">
             {{ item.workDate }}
             <h1>{{ item.dayOfWeek }}</h1>
@@ -26,18 +26,20 @@
           </div>
         </div>
       </div>
-      <el-pagination v-model:current-page="pageNo" layout="prev,pager,next" :total="workData.total" @current-change="fetchWorkData"></el-pagination>
+      <el-pagination v-model:current-page="pageNo" layout=" prev, pager, next" :total="workData.total" @current-change="fetchWorkData" />
     </div>
 
     <!-- 展示医生的结构 -->
     <div class="bottom">
       <!-- 展示即将放号的时间 -->
-      <div class="willing" v-show="false">
+      <div class="willing" v-if="workTime.status == 1">
         <p>2023.06.08</p>
         <span>放号</span>
       </div>
+      <!-- <div class="stop" v-else-if="workTime.status == -1"></div> -->
+      <div class="fill" v-else-if="workTime.status == -1">目前停止挂号,请选择其他时间进行预约</div>
       <!-- 展示医生上下午的结构  -->
-      <div class="doctor">
+      <div class="doctor" v-else>
         <div class="moring">
           <!-- 上部分的文字提示 -->
           <div class="tips">
@@ -45,20 +47,20 @@
             <span>上午</span>
           </div>
           <!-- 展示每一个医生的信息 -->
-          <div class="doctor_Info">
+          <div class="doctor_Info" v-for="doctor in moringArr" :key="doctor.id">
             <!-- 医生名字 -->
             <div class="left">
               <div class="info">
-                <span>副主任医生</span>
+                <span>{{ doctor.title }}</span>
                 <p class="line"></p>
-                <span>柒子小姐</span>
+                <span>{{ doctor.docname }}</span>
               </div>
-              <div class="skill">骨质疏松和骨代谢疾病、糖尿病、甲状腺疾病。</div>
+              <div class="skill">{{ doctor.skill }}</div>
             </div>
             <!-- 右侧挂号钱数 -->
             <div class="right">
-              <div class="money">￥100</div>
-              <el-button type="primary" size="50" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">100</el-button>
+              <div class="money">￥{{ doctor.amount }}</div>
+              <el-button type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">{{ `剩余：` + doctor.availableNumber }}</el-button>
             </div>
           </div>
         </div>
@@ -67,20 +69,20 @@
             <img src="@/assets/images/hospital_下午.png" style="width: 24px" />
             <span>下午</span>
           </div>
-          <div class="doctor_Info">
+          <div class="doctor_Info" v-for="doctor in afterArr">
             <!-- 医生名字 -->
             <div class="left">
               <div class="info">
-                <span>副主任医生</span>
+                <span>{{ doctor.title }}</span>
                 <p class="line"></p>
-                <span>柒子小姐</span>
+                <span>{{ doctor.docname }}</span>
               </div>
-              <div class="skill">骨质疏松和骨代谢疾病、糖尿病、甲状腺疾病。</div>
+              <div class="skill">{{ doctor.skill }}</div>
             </div>
             <!-- 右侧挂号钱数 -->
             <div class="right">
-              <div class="money">￥100</div>
-              <el-button type="primary" size="50" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">100</el-button>
+              <div class="money">￥{{ doctor.amount }}</div>
+              <el-button type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">{{ `剩余：` + doctor.availableNumber }}</el-button>
             </div>
           </div>
         </div>
@@ -90,10 +92,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { reqHospitalWork } from '@/api/hospital'
+import { ref, onMounted, computed } from 'vue'
+import { reqHospitalWork, reqHospitalDoctor } from '@/api/hospital'
 import { useRoute } from 'vue-router'
-import type { HospitalWordData } from '@/api/hospital/type'
+import type { Doctor, DocArr, DoctorResponseData, HospitalWordData } from '@/api/hospital/type'
 //获当前路由对象
 const $route = useRoute()
 //分页当前页面
@@ -105,14 +107,49 @@ onMounted(() => {
   fetchWorkData()
 })
 
+//存储排班日期：当前数据的第一个
+const workTime = ref<any>({})
 //获取挂号数据
 const workData = ref<any>({})
 const fetchWorkData = async () => {
   const result: HospitalWordData = await reqHospitalWork(pageNo.value, limit.value, $route.query.hoscode as string, $route.query.depcode as string)
   if (result.code == 200) {
     workData.value = result.data
+    //存储第一天日期的数据
+    workTime.value = workData.value.bookingScheduleList[0]
+    //获取一次医生的数据
+    getDoctorWorkData()
   }
 }
+//获取某一天医生排班的数据
+const docArr = ref<DocArr>([])
+const getDoctorWorkData = async () => {
+  const result: DoctorResponseData = await reqHospitalDoctor($route.query.hoscode as string, $route.query.depcode as string, workTime.value.workDate)
+  if (result.code == 200) {
+    docArr.value = result.data
+  }
+}
+
+//点击顶部某一天触发回调函数
+const changeTime = (item: any) => {
+  // 存储用户选中那一天的数据
+  workTime.value = item
+  //再发一次请求
+  getDoctorWorkData()
+}
+
+//计算出上午排班的医生数据
+const moringArr = computed(() => {
+  return docArr.value.filter((doc: Doctor) => {
+    return doc.workTime == 0
+  })
+})
+//计算出下午排班的医生数据
+const afterArr = computed(() => {
+  return docArr.value.filter((doc: Doctor) => {
+    return doc.workTime == 1
+  })
+})
 </script>
 
 <style scoped lang="scss">
@@ -156,6 +193,7 @@ const fetchWorkData = async () => {
         text-align: center;
         border-radius: 5px;
         cursor: pointer;
+        transition: all 0.3s;
         &.active {
           border: 1px solid #b1a9a9;
           background-color: #eee;
@@ -169,6 +207,10 @@ const fetchWorkData = async () => {
             color: #b1a9a9;
             border-radius: 5px;
           }
+        }
+        &.cur {
+          transform: scale(1.1);
+          font-weight: 700;
         }
         .tops {
           display: flex;
@@ -229,12 +271,27 @@ const fetchWorkData = async () => {
     font-size: 14px;
     .willing {
       display: flex;
+      align-items: center;
       justify-content: center;
       font-size: 28px;
       font-weight: 700;
       p {
         color: #1296db;
       }
+    }
+    .stop {
+      font-size: 28px;
+      margin-top: 40px;
+      font-weight: 700;
+      color: rgb(244, 185, 76);
+      text-align: center;
+    }
+    .fill {
+      font-size: 28px;
+      margin-top: 40px;
+      font-weight: 700;
+      color: rgb(244, 185, 76);
+      text-align: center;
     }
     .doctor {
       .moring {
