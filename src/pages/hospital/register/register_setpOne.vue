@@ -60,7 +60,7 @@
             <!-- 右侧挂号钱数 -->
             <div class="right">
               <div class="money">￥{{ doctor.amount }}</div>
-              <el-button type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">{{ `剩余：` + doctor.availableNumber }}</el-button>
+              <el-button @click="goStepTwo(doctor)" type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">{{ `剩余：` + doctor.availableNumber }}</el-button>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@
             <!-- 右侧挂号钱数 -->
             <div class="right">
               <div class="money">￥{{ doctor.amount }}</div>
-              <el-button type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">{{ `剩余：` + doctor.availableNumber }}</el-button>
+              <el-button @click="goStepTwo(doctor)" type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">{{ `剩余：` + doctor.availableNumber }}</el-button>
             </div>
           </div>
         </div>
@@ -94,10 +94,11 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { reqHospitalWork, reqHospitalDoctor } from '@/api/hospital'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import type { Doctor, DocArr, DoctorResponseData, HospitalWordData } from '@/api/hospital/type'
 //获当前路由对象
 const $route = useRoute()
+const $router = useRouter()
 //分页当前页面
 const pageNo = ref<number>(1)
 //每一条展示几条数据
@@ -150,6 +151,13 @@ const afterArr = computed(() => {
     return doc.workTime == 1
   })
 })
+//跳转到选择就诊人的选项
+const goStepTwo = (doctor: Doctor) => {
+  //进行路由跳转，并且携带医生的ID
+  console.log('Two')
+
+  $router.push({ path: '/hospital/register_setupTwo', query: { docId: doctor.id } })
+}
 </script>
 
 <style scoped lang="scss">
