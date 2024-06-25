@@ -50,8 +50,9 @@ import { Edit } from '@element-plus/icons-vue'
   }
   .bottom {
     p {
+      font-size: 14px;
       margin: 15px 0px;
-      text-indent: 2em;
+      text-indent: 2.5em;
       letter-spacing: 1px;
     }
   }
