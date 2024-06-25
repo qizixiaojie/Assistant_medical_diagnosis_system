@@ -73,3 +73,32 @@ export interface UserLoginResponseData extends ResponseData {
   data: UserInfo
 }
 
+//获取的科室数据
+export interface BaseMap {
+  "workDateString": string,
+  "releaseTime": string,
+  "bigname": string,
+  "stopTime": string,
+  "depname": string,
+  "hosname": string
+}
+//获取当前科室数据预约挂号数据
+export interface WorkData {
+  "workDate": string,
+  "workDateMd": string,
+  "dayOfWeek": string,
+  "docCount": number,
+  "reservedNumber": null,
+  "availableNumber": number,
+  "status": number
+}
+
+//一共返回的医院数据
+export type BookingScheduleList = WorkData[]
+export interface HospitalWordData extends ResponseData {
+  data: {
+      total: number,
+      bookingScheduleList: BookingScheduleList,
+      baseMap: BaseMap
+  }
+}

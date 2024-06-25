@@ -1,6 +1,6 @@
 //引入二次封装的axios
 import request from "@/utils/request";
-import type { HospitalDetail, DeparmentResponseData, LoginData, UserLoginResponseData } from './type.ts'
+import type { HospitalDetail, DeparmentResponseData, LoginData, UserLoginResponseData ,HospitalWordData} from './type.ts'
 
 //枚举请求地址
 enum API {
@@ -10,7 +10,9 @@ enum API {
   //获取验证码接口
   GETUSERCODE_URL = '/sms/send/',
   //用户登录接口
-  USERLOGIN_URL = '/user/login'
+  USERLOGIN_URL = '/user/login',
+  //获取某一个科室的预约挂号数据
+  HOSPITALWORK_URL='/hosp/hospital/auth/getBookingScheduleRule/'
 
 }
 
@@ -26,3 +28,6 @@ export const reqCode = (phone: string) => request.get<any, any>(API.GETUSERCODE_
 
 //用户登录接口
 export const reqUserLogin = (data: LoginData) => request.post<any, UserLoginResponseData>(API.USERLOGIN_URL, data)
+
+//获取预约挂号的数据
+export const reqHospitalWork = (page: number, limit: number, hoscode: string, depcode: string) => request.get<any, HospitalWordData>(API.HOSPITALWORK_URL + `${page}/${limit}/${hoscode}/${depcode}`);

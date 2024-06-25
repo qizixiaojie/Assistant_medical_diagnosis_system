@@ -84,9 +84,9 @@ const $route = useRoute()
 const showLogin = (item: any) => {
   //点击某一个医院科室按钮，进入到相应的预约挂号详情页面
   $router.push({
-     path: '/hospital/register_setupOne' ,
-     query:{hoscode:$route.query.hoscode,depcode:$route.query.depcode}
-    })
+    path: '/hospital/register_setupOne',
+    query: { hoscode: $route.query.hoscode, depcode: item.depcode }
+  })
 }
 </script>
 

@@ -58,7 +58,6 @@ onMounted(() => {
 const isActive = ref('')
 const changeActive = (path: string) => {
   $router.push({ path: `${path}`, query: { hoscode: $route.query.hoscode } })
-  detailStore.isActived = path
   isActive.value = path
 
 }

@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="right">
-        <img :src="`data:image/jpeg;base64,${hospitalInfo.logoData}`" alt="" />
+        <img :src="`data:image/jpeg;base64,${hospitalInfo.logoData}`" />
       </div>
     </div>
   </el-card>
@@ -29,8 +29,6 @@ const props = defineProps(['hospitalInfo'])
 //进行路由跳转到详情页面
 const $router = useRouter()
 const goDetail = () => {
-  console.log(props.hospitalInfo.hoscode)
-
   $router.push({ path: '/hospital/register', query: { hoscode: props.hospitalInfo.hoscode } })
 }
 </script>
