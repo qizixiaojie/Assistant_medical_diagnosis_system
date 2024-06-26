@@ -4,6 +4,8 @@
       <div class="left">
         <span class="free">{{ user.isInsure == 1 ? '医保' : '自费' }}</span>
         <span class="username">{{ user.name }}</span>
+        <span class="free">{{ user.isInsure == 1 ? '医保' : '自费' }}</span>
+        <span class="username">{{ user.name }}</span>
       </div>
       <div class="right">
         <el-button circle type="primary" size="default" :icon="Edit"></el-button>

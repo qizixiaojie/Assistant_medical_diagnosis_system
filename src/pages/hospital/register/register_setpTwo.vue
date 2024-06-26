@@ -12,7 +12,11 @@
       </template>
       <!-- 卡片的身体信息 -->
       <div class="user">
+<<<<<<< HEAD
         <Visitor @click="changeIndex(index)" v-for="(user, index) in userArr" :key="User.id" class="item" :user="user" :index="index" :currentIndex="index" />
+=======
+        <Visitor v-for="user in userArr" :key="User.id" class="item"  :user="user"/>
+>>>>>>> 40d8c63a1a18711e3af526cf2e50314f26b80c31
       </div>
     </el-card>
 
