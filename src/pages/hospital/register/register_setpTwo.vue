@@ -12,7 +12,7 @@
       </template>
       <!-- 卡片的身体信息 -->
       <div class="user">
-        <Visitor v-for="item in 4" :key="item" class="item" />
+        <Visitor @click="changeIndex(index)" v-for="(user, index) in userArr" :key="User.id" class="item" :user="user" :index="index" :currentIndex="index" />
       </div>
     </el-card>
 
@@ -31,50 +31,51 @@
           <template #label>
             <div class="cell-item">就诊日期：</div>
           </template>
-          2023-06-06周二下午
+          {{ docInfo.workDate }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">就诊医院：</div>
           </template>
-          18100000000
+          {{ docInfo.param?.hosname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">就诊科室：</div>
           </template>
-          Suzhou
+          {{ docInfo.param?.depname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医生名字：</div>
           </template>
-          <el-tag size="small">School</el-tag>
+          {{ docInfo.docname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医生职称：</div>
           </template>
-          District, Suzhou, Jiangsu Province
+          {{ docInfo.title }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医生专长：</div>
           </template>
-          District, Suzhou, Jiangsu Province
+          {{ docInfo.skill }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医事服务器：</div>
           </template>
-          trict, Suzhou, Jiangsu Province
+          {{ docInfo.amount }}
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
 
     <!-- 确定挂号 -->
     <div class="btn">
-      <el-button class="determine" type="primary" size="default"> 确认挂号</el-button>
+      <!-- <el-button class="determine" type="primary" size="default" :disabled="currentIndex == -1 ? true : false"> 确认挂号</el-button> -->
+      <el-button class="determine" type="primary" size="default" :disabled="false"> 确认挂号</el-button>
     </div>
   </div>
 </template>
@@ -83,6 +84,48 @@
 import { User } from '@element-plus/icons-vue'
 // 就诊人信息
 import Visitor from './visitor.vue'
+//引入就诊人信息接口
+import { reqGetUser, reqDoctorInfo } from '@/api/hospital'
+import { onMounted, ref } from 'vue'
+import { UserResponseData, UserArr, DoctorInfoData } from '@/api/hospital/type'
+import { useRoute } from 'vue-router'
+onMounted(() => {
+  fetchUserData()
+  fetchInfo()
+})
+
+//存储就诊人信息
+const userArr = ref<UserArr>([])
+//获取当前路由
+const $route = useRoute()
+//存储医生信息
+const docInfo = ref<any>({})
+//存储用户确定就诊人索引值
+let currentIndex = ref<number>(-1)
+
+//获取就诊人信息
+const fetchUserData = async () => {
+  //获取就诊人的信息，之前账号就是已经有了四个就诊人
+  //但是如果是新的账号，就要先注册几个账号
+
+  const result: UserResponseData = await reqGetUser()
+  if (result.code == 200) {
+    console.log('由于一直获取不到就诊人的信息，所以我直接打开就诊人的按钮' + result.data)
+    userArr.value = result.data
+  }
+}
+//获取医生的信息
+const fetchInfo = async () => {
+  let result: DoctorInfoData = await reqDoctorInfo($route.query.docId as string)
+  if (result.code == 200) {
+    docInfo.value = result.data
+  }
+}
+//点击就诊人子组件的的回调
+const changeIndex = (index: number) => {
+  //存储当前用户选中就诊人信息索引值
+  currentIndex.value = index
+}
 </script>
 
 <style scoped lang="scss">
