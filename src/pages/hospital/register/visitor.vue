@@ -2,28 +2,29 @@
   <div class="visitor">
     <div class="top">
       <div class="left">
-        <div class="free">医保</div>
-        <span class="username">柒子小姐</span>
+        <span class="free">{{ user.isInsure == 1 ? '医保' : '自费' }}</span>
+        <span class="username">{{ user.name }}</span>
       </div>
       <div class="right">
         <el-button circle type="primary" size="default" :icon="Edit"></el-button>
       </div>
     </div>
     <div class="bottom">
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
-      <p>证件类型：身份证</p>
+      <p>证件类型:{{ user.param.certificatesTypeString }}</p>
+      <p>证件号码:{{ user.certificatesNo }}</p>
+      <p>用户性别:{{ user.sex == 0 ? '女生' : '男士' }}</p>
+      <p>出生日期：{{ user.birthdate }}</p>
+      <p>手机号码：{{ user.phone }}</p>
+      <p>婚姻状况:{{ user.isMarry == 0 ? '未婚' : '已婚' }}</p>
+      <p>当前住址{{ user.param.cityString }}</p>
+      <p>详细地址：{{ user.param.fullAddress }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Edit } from '@element-plus/icons-vue'
+defineProps(['user'])
 </script>
 
 <style scoped lang="scss">

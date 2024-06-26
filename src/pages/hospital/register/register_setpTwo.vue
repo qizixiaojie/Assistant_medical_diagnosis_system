@@ -12,7 +12,7 @@
       </template>
       <!-- 卡片的身体信息 -->
       <div class="user">
-        <Visitor v-for="item in 4" :key="item" class="item" />
+        <Visitor v-for="user in userArr" :key="User.id" class="item"  :user="user"/>
       </div>
     </el-card>
 
@@ -83,6 +83,25 @@
 import { User } from '@element-plus/icons-vue'
 // 就诊人信息
 import Visitor from './visitor.vue'
+//引入就正如信息接口
+import { reqGetUser } from '@/api/hospital'
+import { onMounted, ref } from 'vue'
+import { UserResponseData, UserArr } from '@/api/hospital/type'
+onMounted(() => {
+  fetchUserData()
+})
+
+//存储就诊人信息
+const userArr = ref<UserArr>([])
+//获取就诊人信息
+const fetchUserData = async () => {
+  //获取就诊人的信息，之前账号就是已经有了四个就诊人
+  //但是如果是新的账号，就要先注册几个账号
+  const result: UserResponseData = await reqGetUser()
+  if (result.code == 200) {
+    userArr.value = result.data
+  }
+}
 </script>
 
 <style scoped lang="scss">
