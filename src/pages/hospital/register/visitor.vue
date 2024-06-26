@@ -4,8 +4,6 @@
       <div class="left">
         <span class="free">{{ user.isInsure == 1 ? '医保' : '自费' }}</span>
         <span class="username">{{ user.name }}</span>
-        <span class="free">{{ user.isInsure == 1 ? '医保' : '自费' }}</span>
-        <span class="username">{{ user.name }}</span>
       </div>
       <div class="right">
         <el-button circle type="primary" size="default" :icon="Edit"></el-button>
@@ -53,11 +51,10 @@ defineProps(['user', 'index', 'currentIndex'])
     }
   }
   .bottom {
+    position: relative;
+    padding: 20px;
     p {
-      font-size: 14px;
-      margin: 15px 0px;
-      text-indent: 2.5em;
-      letter-spacing: 1px;
+      line-height: 40px;
     }
     .confirm {
       position: absolute;
@@ -68,8 +65,8 @@ defineProps(['user', 'index', 'currentIndex'])
       border: 1px dashed red;
       text-align: center;
       line-height: 200px;
-      top: 33%;
-      left: 31%;
+      left: 20%;
+      top: 20%;
       opacity: 0.5;
       transform: rotate(35deg);
       font-weight: 900;
