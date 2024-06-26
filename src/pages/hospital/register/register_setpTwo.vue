@@ -125,7 +125,6 @@ const fetchInfo = async () => {
     docInfo.value = result.data
   }
 }
-const a = ref()
 //点击就诊人子组件的的回调
 const changeIndex = (index: number) => {
   //存储当前用户选中就诊人信息索引值
