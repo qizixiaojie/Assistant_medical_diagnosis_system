@@ -14,7 +14,8 @@
       </p>
     </div>
     <!-- 卡片身体的底部:认证成功的结构、认证未成功的结构 -->
-    <el-descriptions v-if="userInfo.authStatus == 1" size="small" class="margin-top" :column="1" border style="margin: 20px auto">
+    <!-- 注意它的渲染是0，和表单是相反的内容，因为是从后台渲染出来的全是实名认证的s -->
+    <el-descriptions v-if="userInfo.authStatus == 0" size="small" class="margin-top" :column="1" border style="margin: 20px auto">
       <el-descriptions-item label-align="center" :width="20">
         <template #label>
           <div class="cell-item">用户姓名</div>
@@ -35,13 +36,13 @@
       </el-descriptions-item>
     </el-descriptions>
     <!-- 用户未验证的结构 -->
-    <el-form v-if="userInfo.authStatus == 0" style="width: 60%; margin: 20px auto" label-width="80" ref="form">
+    <el-form v-if="userInfo.authStatus == 1" style="width: 60%; margin: 20px auto" label-width="80" ref="form">
       <el-form-item label="用户姓名" prop="name">
         <el-input placeholder="请输入用户姓名"></el-input>
       </el-form-item>
       <el-form-item label="证件类型" prop="certificatesType">
         <el-select style="width: 100%" placeholder="请选择证件类型">
-          <el-option></el-option>
+          <el-option :label="item.name" :value="item.value" v-for="(item, index) in arrType" :key="index"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="证件号码" prop="certificatesNo">
@@ -70,24 +71,36 @@
 
 <script setup lang="ts">
 //引入element-plus图标
-import { reqUserInfo } from '@/api/user'
-import { UseringoResponseData } from '@/api/user/type'
+import { reqCertationType, reqUserInfo } from '@/api/user'
+import { CertationArr, CertationTypeResponseData, UseringoResponseData } from '@/api/user/type'
 import { InfoFilled } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
 //存储用户信息
 const userInfo: any = ref<any>({})
+let arrType = ref<CertationArr>([])
 //组件挂载完毕
 onMounted(() => {
   //获取用户信息的方法
   getUserInfo()
+  getType()
 })
+
 //获取用户信息方法
 const getUserInfo = async () => {
   let result: UseringoResponseData = await reqUserInfo()
-  console.log(result.data)
 
   if (result.code == 200) {
     userInfo.value = result.data
+  }
+}
+
+//获取证件类型的数据
+const getType = async () => {
+  let result: CertationTypeResponseData = await reqCertationType()
+  console.log(result.data)
+
+  if (result.code == 200) {
+    arrType.value = result.data
   }
 }
 </script>

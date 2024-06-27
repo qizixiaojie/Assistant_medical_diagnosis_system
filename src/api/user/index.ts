@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import { OrderResponseData, PayReslt, QrCode, SubmitOrder, UseringoResponseData } from "./type";
+import { CertationTypeResponseData, OrderResponseData, PayReslt, QrCode, SubmitOrder, UserParams, UseringoResponseData } from "./type";
 
 enum API {
   //提交订单,获取订单号码接口
@@ -14,6 +14,10 @@ enum API {
   PAYRESULT_URL = '/order/weixin/queryPayStatus/',
   //获取当前账号用户信息
   USERINFO_URL = '/user/auth/getUserInfo',
+  //获取证件的类型的接口地址
+  CERTIFICATIONTYPE_URL = '/cmn/dict/findByDictCode/',
+  //用户认证的结构
+  USERCERTATION_URL = '/user/auth/userAuah',
 }
 //提交订单
 export const reqSubmitOrder = (hoscode: string, scheduleId: string, patientId: number) => request.post<any, SubmitOrder>(API.SUBMITORDER_URL + `${hoscode}/${scheduleId}/${patientId}`);
@@ -27,3 +31,7 @@ export const reqQrcode = (orderId: string) => request.get<any, QrCode>(API.QRCOD
 export const reqQueryPayState = (orderId: string) => request.get<any, PayReslt>(API.PAYRESULT_URL + orderId);
 //获取当前用户信息的接口
 export const reqUserInfo = () => request.get<any, UseringoResponseData>(API.USERINFO_URL);
+//获取证件类型的方法
+export const reqCertationType = (CertificatesType = 'CertificatesType') => request.get<any, CertationTypeResponseData>(API.CERTIFICATIONTYPE_URL + CertificatesType);
+//用户认证接口
+export const reqUserCertation = (data: UserParams) => request.post<any, any>(API.USERCERTATION_URL, data);
