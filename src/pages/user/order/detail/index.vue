@@ -77,13 +77,13 @@
               {{ orderInfo.createTime }}
             </el-descriptions-item>
           </el-descriptions>
-          <div class="btn"  v-if="orderInfo.orderStatus == 0 || orderInfo.orderStatus == 1">
+          <div class="btn" v-if="orderInfo.orderStatus == 0 || orderInfo.orderStatus == 1">
             <el-popconfirm title="确定取消预约吗?" @confirm="cancel">
               <template #reference>
                 <el-button>取消预约</el-button>
               </template>
             </el-popconfirm>
-            <el-button type="primary" size="default">支付</el-button>
+            <el-button type="primary" size="default" @click="openDialog">支付</el-button>
           </div>
         </div>
         <div class="right">
@@ -104,15 +104,16 @@
     </el-card>
     <!-- 展示支付二维码的结构 -->
     <!-- 对话框通过v-model控制显示与隐藏的 true:展示 false隐藏 -->
-    <el-dialog title="微信支付" width="400">
+    <el-dialog v-model="dialogVisible" title="微信支付" width="400">
       <!-- 支付需要使用的二维码图片 -->
       <div class="qrocde">
+        <img src="@/assets/images/医院的信息.png" style="width: 80%" />
         <p>请使用微信扫一扫</p>
         <p>扫描二维码支付</p>
       </div>
       <!-- 对话框底部插槽传递结构 -->
       <template #footer>
-        <el-button type="primary" size="default">关闭窗口</el-button>
+        <el-button type="primary" size="default" @click="closeDialog">关闭窗口</el-button>
       </template>
     </el-dialog>
   </div>
@@ -125,6 +126,7 @@ import { useRoute } from 'vue-router'
 import { OrderInfo, OrderResponseData } from '@/api/user/type'
 import { ElMessage } from 'element-plus'
 //获取路由信息
+let dialogVisible = ref<boolean>(false)
 let $route = useRoute()
 //组件挂载完毕
 onMounted(() => {
@@ -156,6 +158,17 @@ const cancel = async () => {
       message: '取消预约失败'
     })
   }
+}
+
+//点击支付按钮的回调
+const openDialog = async () => {
+  //展示对话框
+  dialogVisible.value = true
+}
+//关闭窗口的回调
+const closeDialog = () => {
+  //关闭对话框,对话框隐藏
+  dialogVisible.value = false
 }
 </script>
 
