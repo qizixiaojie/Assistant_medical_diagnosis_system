@@ -127,16 +127,16 @@ import { useRoute } from 'vue-router'
 import { OrderInfo, OrderResponseData, PayReslt, QrCode } from '@/api/user/type'
 import { ElMessage } from 'element-plus'
 //获取路由信息
-let dialogVisible = ref<boolean>(false)
-let $route = useRoute()
+const dialogVisible = ref<boolean>(false)
+const $route = useRoute()
 //存储定时器引用
-let timer = ref<any>()
+const timer = ref<any>()
 //生成二维码插件qrcode
 //这个可能做不到，用自己后端接口的
 //@ts-ignore
 import QRCode from 'qrcode'
 //定义存储二维码图片路径
-let imgUrl = ref<string>('')
+const imgUrl = ref<string>('')
 //组件挂载完毕
 onMounted(() => {
   getOrderInfo()
@@ -147,7 +147,7 @@ const orderInfo = ref<OrderInfo>({} as OrderInfo)
 
 //获取订单详情的数据
 const getOrderInfo = async () => {
-  let result: OrderResponseData = await reqOrderInfo($route.query.orderId as string)
+  const result: OrderResponseData = await reqOrderInfo($route.query.orderId as string)
   console.log(result.data)
   if (result.code == 200) {
     orderInfo.value = result.data
@@ -174,13 +174,13 @@ const openDialog = async () => {
   //展示对话框
   dialogVisible.value = true
   //获取支付需要使用二维码信息
-  let result: QrCode = await reqQrcode($route.query.orderId as string)
+  const result: QrCode = await reqQrcode($route.query.orderId as string)
   //更具服务器返回二维码信息生成二维码图片
   imgUrl.value = await QRCode.toDataURL(result.data.codeUrl)
   //询问服务器当前这笔交易的支付结果
   //只要二维码查来:需要每隔几秒询问服务器是否支付成功
   timer.value = setInterval(async () => {
-    let result: PayReslt = await reqQueryPayState($route.query.orderId as string)
+    const result: PayReslt = await reqQueryPayState($route.query.orderId as string)
     console.log(result.data)
     //如果服务器返回的数据data:true,代表支付成功
     if (result.data) {

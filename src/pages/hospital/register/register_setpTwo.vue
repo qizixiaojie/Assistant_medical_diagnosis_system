@@ -112,8 +112,10 @@ const fetchUserData = async () => {
   //但是如果是新的账号，就要先注册几个账号
 
   const result: UserResponseData = await reqGetUser()
+  console.log(result.data)
+
   if (result.code == 200) {
-    userArr.value = result.data
+    userArr.value = result.data.splice(0, 3)
   }
 }
 //获取医生的信息

@@ -14,28 +14,28 @@
       </p>
     </div>
     <!-- 卡片身体的底部:认证成功的结构、认证未成功的结构 -->
-    <el-descriptions v-if="false" size="small" class="margin-top" :column="1" border style="margin: 20px auto">
+    <el-descriptions v-if="userInfo.authStatus == 1" size="small" class="margin-top" :column="1" border style="margin: 20px auto">
       <el-descriptions-item label-align="center" :width="20">
         <template #label>
           <div class="cell-item">用户姓名</div>
         </template>
-        柒子小姐
+        {{ userInfo.nickName }}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" :width="20">
         <template #label>
           <div class="cell-item">证件类型</div>
         </template>
-        身份证
+        {{ userInfo.certificatesType == '10' ? '身份证' : '户口本' }}
       </el-descriptions-item>
       <el-descriptions-item label-align="center" width="20px">
         <template #label>
           <div class="cell-item">证件号码</div>
         </template>
-        111111111111111
+        {{ userInfo.certificatesNo }}
       </el-descriptions-item>
     </el-descriptions>
     <!-- 用户未验证的结构 -->
-    <el-form style="width: 60%; margin: 20px auto" label-width="80" ref="form">
+    <el-form v-if="userInfo.authStatus == 0" style="width: 60%; margin: 20px auto" label-width="80" ref="form">
       <el-form-item label="用户姓名" prop="name">
         <el-input placeholder="请输入用户姓名"></el-input>
       </el-form-item>
@@ -70,7 +70,26 @@
 
 <script setup lang="ts">
 //引入element-plus图标
+import { reqUserInfo } from '@/api/user'
+import { UseringoResponseData } from '@/api/user/type'
 import { InfoFilled } from '@element-plus/icons-vue'
+import { onMounted, ref } from 'vue'
+//存储用户信息
+const userInfo: any = ref<any>({})
+//组件挂载完毕
+onMounted(() => {
+  //获取用户信息的方法
+  getUserInfo()
+})
+//获取用户信息方法
+const getUserInfo = async () => {
+  let result: UseringoResponseData = await reqUserInfo()
+  console.log(result.data)
+
+  if (result.code == 200) {
+    userInfo.value = result.data
+  }
+}
 </script>
 
 <style scoped lang="scss">
