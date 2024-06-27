@@ -154,8 +154,6 @@ const afterArr = computed(() => {
 //跳转到选择就诊人的选项
 const goStepTwo = (doctor: Doctor) => {
   //进行路由跳转，并且携带医生的ID
-  console.log('Two')
-
   $router.push({ path: '/hospital/register_setupTwo', query: { docId: doctor.id } })
 }
 </script>

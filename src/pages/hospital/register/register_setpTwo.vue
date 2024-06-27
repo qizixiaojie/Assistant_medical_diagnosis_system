@@ -139,7 +139,6 @@ const submitOrder = async () => {
   const patientId = userArr.value[currentIndex.value].id
   //提交订单
   const result: SubmitOrder = await reqSubmitOrder(hoscode, scheduleId, patientId)
-  console.log(result.data)
 
   //提交订单成功
   if (result.code == 200) {
