@@ -74,7 +74,7 @@
 
     <!-- 确定挂号 -->
     <div class="btn">
-      <el-button class="determine" type="primary" size="default" :disabled="currentIndex == -1 ? true : false"> 确认挂号</el-button>
+      <el-button @click="submitOrder" class="determine" type="primary" size="default" :disabled="currentIndex == -1 ? true : false"> 确认挂号</el-button>
     </div>
   </div>
 </template>
@@ -87,7 +87,10 @@ import Visitor from './visitor.vue'
 import { reqGetUser, reqDoctorInfo } from '@/api/hospital'
 import { onMounted, ref } from 'vue'
 import { UserResponseData, UserArr, DoctorInfoData } from '@/api/hospital/type'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { SubmitOrder } from '@/api/user/type'
+import { reqSubmitOrder } from '@/api/user'
+import { ElMessage } from 'element-plus'
 onMounted(() => {
   fetchUserData()
   fetchInfo()
@@ -97,6 +100,7 @@ onMounted(() => {
 const userArr = ref<UserArr>([])
 //获取当前路由
 const $route = useRoute()
+const $router = useRouter()
 //存储医生信息
 const docInfo = ref<any>({})
 //存储用户确定就诊人索引值
@@ -109,7 +113,6 @@ const fetchUserData = async () => {
 
   const result: UserResponseData = await reqGetUser()
   if (result.code == 200) {
-    console.log('由于一直获取不到就诊人的信息，所以我直接打开就诊人的按钮' + result.data)
     userArr.value = result.data
   }
 }
@@ -124,6 +127,29 @@ const fetchInfo = async () => {
 const changeIndex = (index: number) => {
   //存储当前用户选中就诊人信息索引值
   currentIndex.value = index
+}
+
+//确定挂号按钮的回调
+const submitOrder = async () => {
+  //医院编号
+  const hoscode = docInfo.value.hoscode
+  //医生的ID
+  const scheduleId = docInfo.value.id
+  //就诊人的ID
+  const patientId = userArr.value[currentIndex.value].id
+  //提交订单
+  const result: SubmitOrder = await reqSubmitOrder(hoscode, scheduleId, patientId)
+  console.log(result.data)
+
+  //提交订单成功
+  if (result.code == 200) {
+    $router.push({ path: '/user/order', query: { orderId: result.data } })
+  } else {
+    ElMessage({
+      type: 'error',
+      message: result.message
+    })
+  }
 }
 </script>
 
