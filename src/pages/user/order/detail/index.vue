@@ -107,7 +107,8 @@
     <el-dialog v-model="dialogVisible" title="微信支付" width="400">
       <!-- 支付需要使用的二维码图片 -->
       <div class="qrocde">
-        <img src="@/assets/images/医院的信息.png" style="width: 80%" />
+        <!-- 这个可能绑定不了微信支付imgUrl -->
+        <img :src="imgUrl" style="width: 80%" />
         <p>请使用微信扫一扫</p>
         <p>扫描二维码支付</p>
       </div>
@@ -121,13 +122,19 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { reqCancelOrder, reqOrderInfo } from '@/api/user'
+import { reqCancelOrder, reqOrderInfo, reqQrcode } from '@/api/user'
 import { useRoute } from 'vue-router'
-import { OrderInfo, OrderResponseData } from '@/api/user/type'
+import { OrderInfo, OrderResponseData, QrCode } from '@/api/user/type'
 import { ElMessage } from 'element-plus'
 //获取路由信息
 let dialogVisible = ref<boolean>(false)
 let $route = useRoute()
+//生成二维码插件qrcode
+//这个可能做不到，用自己后端接口的
+//@ts-ignore
+import QRCode from 'qrcode'
+//定义存储二维码图片路径
+let imgUrl = ref<string>('')
 //组件挂载完毕
 onMounted(() => {
   getOrderInfo()
@@ -164,6 +171,11 @@ const cancel = async () => {
 const openDialog = async () => {
   //展示对话框
   dialogVisible.value = true
+  //获取支付需要使用二维码信息
+  let result: QrCode = await reqQrcode($route.query.orderId as string)
+  //更具服务器返回二维码信息生成二维码图片
+  imgUrl.value = await QRCode.toDataURL(result.data.codeUrl)
+  console.log(imgUrl.value)
 }
 //关闭窗口的回调
 const closeDialog = () => {

@@ -44,3 +44,15 @@ export interface OrderInfo {
 export interface OrderResponseData extends ResponseData {
   data: OrderInfo
 }
+
+//获取二维码接口返回的数据ts类型
+export interface PayInfo {
+  "codeUrl": string,
+  "orderId": number,
+  "totalFee": number,
+  "resultCode": string
+}
+
+export interface QrCode extends ResponseData {
+  data: PayInfo
+}
