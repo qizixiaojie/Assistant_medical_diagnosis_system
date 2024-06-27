@@ -77,8 +77,8 @@
               {{ orderInfo.createTime }}
             </el-descriptions-item>
           </el-descriptions>
-          <div class="btn">
-            <el-popconfirm title="确定取消预约吗?">
+          <div class="btn"  v-if="orderInfo.orderStatus == 0 || orderInfo.orderStatus == 1">
+            <el-popconfirm title="确定取消预约吗?" @confirm="cancel">
               <template #reference>
                 <el-button>取消预约</el-button>
               </template>
@@ -120,9 +120,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { reqOrderInfo } from '@/api/user'
+import { reqCancelOrder, reqOrderInfo } from '@/api/user'
 import { useRoute } from 'vue-router'
 import { OrderInfo, OrderResponseData } from '@/api/user/type'
+import { ElMessage } from 'element-plus'
 //获取路由信息
 let $route = useRoute()
 //组件挂载完毕
@@ -139,6 +140,21 @@ const getOrderInfo = async () => {
   console.log(result.data)
   if (result.code == 200) {
     orderInfo.value = result.data
+  }
+}
+//取消订单   订单状态有三种 orderStatus  -1  取消预约  0 预约但是没有支付  1 支付成功
+const cancel = async () => {
+  try {
+    //取消预约成功
+    await reqCancelOrder($route.query.orderId as string)
+    //再次获取订单详情的数据
+    getOrderInfo()
+    console.log('aaaaaaaaa')
+  } catch (error) {
+    ElMessage({
+      type: 'error',
+      message: '取消预约失败'
+    })
   }
 }
 </script>
