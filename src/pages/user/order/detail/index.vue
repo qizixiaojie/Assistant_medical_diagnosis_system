@@ -12,13 +12,13 @@
         <el-tag class="ml-2" type="success">
           <div class="tag">
             <img src="@/assets/images/user_对.png" style="width: 20px" />
-            <span>预约成功待支付</span>
+            <span>{{ orderInfo.param?.orderStatusString }}</span>
           </div>
         </el-tag>
         <div class="right_info">
           <img src="@/assets/images/医院的信息.png" alt="" />
           <div class="info">
-            <p>微信 关注 “北京114预约挂号”</p>
+            <p>微信 关注 “{{ orderInfo.hosname }}预约挂号”</p>
             <p>“快速预约挂号”</p>
           </div>
         </div>
@@ -32,49 +32,49 @@
               <template #label>
                 <div class="cell-item">就诊人信息</div>
               </template>
-              11111
+              {{ orderInfo.patientName }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">就诊日期</div>
               </template>
-              1111
+              {{ orderInfo.reserveDate }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">就诊医院</div>
               </template>
-              11111
+              {{ orderInfo.hosname }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">就诊科室</div>
               </template>
-              111
+              {{ orderInfo.depname }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">医生职称</div>
               </template>
-              1111
+              {{ orderInfo.title }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">医事服务费</div>
               </template>
-              <span style="color: red">1111</span>
+              <span style="color: red">{{ orderInfo.amount }}</span>
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">挂号单号</div>
               </template>
-              1111
+              {{ orderInfo.outTradeNo }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
                 <div class="cell-item">挂号时间</div>
               </template>
-              11111
+              {{ orderInfo.createTime }}
             </el-descriptions-item>
           </el-descriptions>
           <div class="btn">
@@ -94,10 +94,10 @@
               </div>
             </template>
             <p>1.请确认就诊人信息是否准确，若填写错误将无法取号就诊，损失由本人承担；</p>
-            <p style="color: red">2.【取号】就诊当天需在前 在医院取号，未取号视为爽约，该号不退不换；</p>
-            <p>3.【退号】在前可在线退号 ，逾期将不可办理退号退费；</p>
-            <p>4.北京114预约挂号支持自费患者使用身份证预约，同时支持北京市医保患者使用北京社保卡在平台预约挂号。请于就诊当日，携带预约挂号所使用的有效身份证件到院取号；</p>
-            <p>5.请注意北京市医保患者在住院期间不能使用社保卡在门诊取号。</p>
+            <p style="color: red">2.【取号】就诊当天需在前 {{ orderInfo.fetchTime }}在医院取号，未取号视为爽约，该号不退不换；</p>
+            <p>3.【退号】在{{ orderInfo.quitTime }}前可在线退号 ，逾期将不可办理退号退费；</p>
+            <p>4.{{ orderInfo.hosname }}预约挂号支持自费患者使用身份证预约，同时支持北京市医保患者使用北京社保卡在平台预约挂号。请于就诊当日，携带预约挂号所使用的有效身份证件到院取号；</p>
+            <p>5.请注意{{ orderInfo.hosname }}医保患者在住院期间不能使用社保卡在门诊取号。</p>
           </el-card>
         </div>
       </div>
@@ -118,7 +118,30 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { reqOrderInfo } from '@/api/user'
+import { useRoute } from 'vue-router'
+import { OrderInfo, OrderResponseData } from '@/api/user/type'
+//获取路由信息
+let $route = useRoute()
+//组件挂载完毕
+onMounted(() => {
+  getOrderInfo()
+})
+
+//控制对话框显示与隐藏的数据
+const orderInfo = ref<OrderInfo>({} as OrderInfo)
+
+//获取订单详情的数据
+const getOrderInfo = async () => {
+  let result: OrderResponseData = await reqOrderInfo($route.query.orderId as string)
+  console.log(result.data)
+  if (result.code == 200) {
+    orderInfo.value = result.data
+  }
+}
+</script>
 
 <style scoped lang="scss">
 .box-card {
