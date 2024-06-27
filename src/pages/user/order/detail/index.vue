@@ -104,7 +104,7 @@
     </el-card>
     <!-- 展示支付二维码的结构 -->
     <!-- 对话框通过v-model控制显示与隐藏的 true:展示 false隐藏 -->
-    <el-dialog v-model="dialogVisible" title="微信支付" width="400">
+    <el-dialog v-model="dialogVisible" title="微信支付" width="400" @close="close">
       <!-- 支付需要使用的二维码图片 -->
       <div class="qrocde">
         <!-- 这个可能绑定不了微信支付imgUrl -->
@@ -122,13 +122,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { reqCancelOrder, reqOrderInfo, reqQrcode } from '@/api/user'
+import { reqCancelOrder, reqOrderInfo, reqQrcode, reqQueryPayState } from '@/api/user'
 import { useRoute } from 'vue-router'
-import { OrderInfo, OrderResponseData, QrCode } from '@/api/user/type'
+import { OrderInfo, OrderResponseData, PayReslt, QrCode } from '@/api/user/type'
 import { ElMessage } from 'element-plus'
 //获取路由信息
 let dialogVisible = ref<boolean>(false)
 let $route = useRoute()
+//存储定时器引用
+let timer = ref<any>()
 //生成二维码插件qrcode
 //这个可能做不到，用自己后端接口的
 //@ts-ignore
@@ -175,12 +177,37 @@ const openDialog = async () => {
   let result: QrCode = await reqQrcode($route.query.orderId as string)
   //更具服务器返回二维码信息生成二维码图片
   imgUrl.value = await QRCode.toDataURL(result.data.codeUrl)
-  console.log(imgUrl.value)
+  //询问服务器当前这笔交易的支付结果
+  //只要二维码查来:需要每隔几秒询问服务器是否支付成功
+  timer.value = setInterval(async () => {
+    let result: PayReslt = await reqQueryPayState($route.query.orderId as string)
+    console.log(result.data)
+    //如果服务器返回的数据data:true,代表支付成功
+    if (result.data) {
+      //关闭对话框
+      dialogVisible.value = false
+      //提示信息
+      ElMessage({
+        type: 'success',
+        message: '支付成功'
+      })
+      //清除定时器
+      clearInterval(timer.value)
+      //再次获取订单详情的数据
+      getOrderInfo()
+    }
+  }, 2000)
 }
 //关闭窗口的回调
 const closeDialog = () => {
   //关闭对话框,对话框隐藏
   dialogVisible.value = false
+  //清除定时器
+  clearInterval(timer.value)
+}
+//对话框右上角关闭的叉子的回调
+const close = () => {
+  clearInterval(timer.value)
 }
 </script>
 

@@ -56,3 +56,8 @@ export interface PayInfo {
 export interface QrCode extends ResponseData {
   data: PayInfo
 }
+
+//查询支付结果的ts数据类型
+export interface PayReslt extends ResponseData {
+  data: boolean
+}
