@@ -11,19 +11,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import request from './utils'
-onMounted(() => {
-  getCarData()
-})
-
-//获取卡片数据
-const getCarData = async () => {
-  const reslut = await request.get('/hospital/hospital_data/1')
-  console.log(reslut.data)
-}
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .container {

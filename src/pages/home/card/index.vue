@@ -2,26 +2,29 @@
   <el-card class="box-card" shadow="hover">
     <div class="content">
       <div class="left">
-        <div class="hospital_name">医院名字</div>
+        <div class="hospital_name">{{ hospitalCarData.hosname }}</div>
         <div class="tip">
           <div class="level">
             <img src="@/assets/images/home_赞.png" style="width: 16px" />
-            <span>三级甲等</span>
+            <span>{{ hospitalCarData.hostype == '1' ? '三级甲等' : hospitalCarData.hostype == '2' ? '二级乙等' : hospitalCarData.hostype == '3' ? '一级丁等' : '未知等级' }}</span>
           </div>
           <div class="time">
             <img src="@/assets/images/home_闹钟.png" style="width: 16px" />
-            <span>每天10点放号</span>
+            <span>每天{{ hospitalCarData.daily_release_time }}放号</span>
           </div>
         </div>
       </div>
       <div class="right">
-        <img src="@/assets/images/home_云平台.png" />
+        <img :src="`data:image/jpeg;base64,${hospitalCarData.logoData}`" />
       </div>
     </div>
   </el-card>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+//接受父亲传递过来的数据
+defineProps(['hospitalCarData'])
+</script>
 
 <style scoped lang="scss">
 .content {

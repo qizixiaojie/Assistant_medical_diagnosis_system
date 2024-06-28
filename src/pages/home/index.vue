@@ -13,9 +13,9 @@
       <region />
       <!-- 展示医院组件 -->
       <div class="hospital">
-        <card class="item" v-for="item in 10" :key="item" />
+        <card class="item" v-for="(item, index) in hospitalCarData" :key="index" :hospitalCarData="item" />
         <!-- 分页器 -->
-        <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" :background="true" layout=" prev, pager, next, jumper,-> ,sizes,total" :total="13" />
+        <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" :page-sizes="[10, 20, 30, 40]" :background="true" layout=" prev, pager, next, jumper,-> ,sizes,total" @current-change="currentChange" @size-change="sizeChange" :total="32" />
       </div>
     </el-col>
     <el-col :span="4">
@@ -37,11 +37,38 @@ import tip from '@/pages/home/tip/index.vue'
 import region from '@/pages/home/region/index.vue'
 //导入卡片
 import card from '@/pages/home/card/index.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { reqHospitalCard } from '@/api/hospital'
+onMounted(() => {
+  getCarData()
+})
 
 //分页器模块
 const pageNo = ref<number>(1)
 const pageSize = ref<number>(10) //显示多少个
+// 存储医院卡片数据
+const hospitalCarData = ref([])
+
+//获取卡片数据
+const getCarData = async () => {
+  const result = await reqHospitalCard(pageNo.value, pageSize.value)
+  console.log(result.data)
+
+  if (result.code) {
+    hospitalCarData.value = result.data
+  }
+}
+
+//分页器
+const currentChange = () => {
+  getCarData()
+}
+//分页器选择级别发生变化的时候触发
+const sizeChange = () => {
+  //当前页面回归第一页
+  pageNo.value = 1
+  getCarData()
+}
 </script>
 
 <style scoped>
