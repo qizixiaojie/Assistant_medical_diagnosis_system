@@ -8,19 +8,19 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue()],
   //src文件的配置名
-  resolve:{
-    alias:{
-      "@":path.resolve(__dirname,'src'),
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, 'src'),
     }
   },
-  //配置代理跨域
-  server:{
-    proxy:{
-      '/api':{
-        target:'http://syt.atguigu.cn',
-        //是否更改请求地址
-        changeOrigin:true,
-      }
-    }
-  }
+  // // 配置代理跨域
+  // server: {
+  //   proxy: {
+  //     '/qzxj': {
+  //       target: 'http://localhost:3000/',
+  //       //是否更改请求地址
+  //       changeOrigin: true,
+  //     }
+  //   }
+  // }
 })
