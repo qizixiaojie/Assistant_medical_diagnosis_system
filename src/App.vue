@@ -6,17 +6,12 @@
       <!-- 展示路由组件 -->
       <router-view></router-view>
     </div>
+    <!-- 底部组件 -->
     <Hospital_bottom />
-    <!-- 登录组件 -->
-    <Login v-if="userStore.visable" />
   </div>
 </template>
 
-<script setup lang="ts">
-//引入用户仓库
-import useUserStore from './store/modules/interface/user'
-const userStore = useUserStore()
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .container {
