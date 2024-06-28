@@ -37,7 +37,7 @@ defineProps(['hospitalCarData'])
     }
   }
   .left {
-    width: 60%;
+    width: 70%;
     .tip {
       color: #b1a9a9;
       margin-top: 20px;

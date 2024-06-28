@@ -38,7 +38,7 @@ import region from '@/pages/home/region/index.vue'
 //导入卡片
 import card from '@/pages/home/card/index.vue'
 import { onMounted, ref } from 'vue'
-import { reqHospitalCard } from '@/api/hospital'
+import { reqHospital_Card } from '@/api/hospital'
 onMounted(() => {
   getCarData()
 })
@@ -51,9 +51,7 @@ const hospitalCarData = ref([])
 
 //获取卡片数据
 const getCarData = async () => {
-  const result = await reqHospitalCard(pageNo.value, pageSize.value)
-  console.log(result.data)
-
+  const result = await reqHospital_Card(pageNo.value, pageSize.value)
   if (result.code) {
     hospitalCarData.value = result.data
   }
@@ -70,7 +68,9 @@ const sizeChange = () => {
   getCarData()
 }
 </script>
-
+<script lang="ts">
+name: 'Home_level'
+</script>
 <style scoped>
 .hospital {
   display: flex;
