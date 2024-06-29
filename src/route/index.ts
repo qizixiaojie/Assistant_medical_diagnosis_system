@@ -11,6 +11,10 @@ export default createRouter({
       //路由懒加载，更快导入
       component: () => import('@/pages/home/index.vue')
     },
+    {
+      path: '/hospital',
+      component: () => import('@/pages/hopital/index.vue')
+    },
     //路由重定向
     {
       path: '/',

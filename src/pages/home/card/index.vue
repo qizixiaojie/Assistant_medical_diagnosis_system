@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" shadow="hover">
+  <el-card class="box-card" shadow="hover" @click="goDetail">
     <div class="content">
       <div class="left">
         <div class="hospital_name">{{ hospitalCarData.hosname }}</div>
@@ -22,8 +22,17 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
 //接受父亲传递过来的数据
-defineProps(['hospitalCarData'])
+const props = defineProps(['hospitalCarData'])
+//进行路由跳转到详情页面
+const $router = useRouter()
+const goDetail = () => {
+  // console.log(props.hospitalCarData.hoscode)
+
+  $router.push({ path: '/hospital', query: props.hospitalCarData.hoscode })
+}
 </script>
 
 <style scoped lang="scss">
