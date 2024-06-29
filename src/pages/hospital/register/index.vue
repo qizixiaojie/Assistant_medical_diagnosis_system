@@ -1,7 +1,202 @@
 <template>
-  <div>register</div>
+  <div class="register">
+    <div class="top">
+      <div class="title">
+        {{ hospitalStore.hospitalInfo.hosname }}
+      </div>
+      <div class="level">
+        <img src="@/assets/images/hospital_点赞赞.png" style="width: 20px" />&nbsp;
+        <span>{{ hospitalStore.hospitalInfo.hostype == '1' ? '三级甲等' : hospitalStore.hospitalInfo.hostype == '2' ? '二级乙等' : hospitalStore.hospitalInfo.hostype == '3' ? '一级丁等' : '未知等级' }}</span>
+      </div>
+    </div>
+    <!-- 展示内容区域 -->
+    <div class="content">
+      <div class="left" v-if="hospitalStore.hospitalInfo?.logoData">
+        <img :src="`data:image/jpeg;base64,${hospitalStore.hospitalInfo.logoData}`" />
+      </div>
+      <div class="right">
+        <div class="rule">挂号规则</div>
+        <div class="time">
+          <span><span>预约周期：</span>10天</span>
+          <span><span>放号时间：</span>{{ hospitalStore.hospitalInfo.daily_release_time }}</span>
+          <span><span>停挂时间：</span>{{ hospitalStore.hospitalInfo.stopOrder }}</span>
+        </div>
+        <div class="address">
+          <span><span>具体地址：</span>{{ hospitalStore.hospitalInfo.address }}</span>
+          <span><span>退号时间：</span>就诊前一工作日{{ hospitalStore.hospitalInfo.quitTime }}前取消</span>
+        </div>
+        <div class="route">
+          import { ref } from 'vue';
+          <span><span>具体路线：</span>{{ hospitalStore.hospitalInfo.route }}</span>
+        </div>
+        <div class="rule" style="margin-top: 20px">医院预约规则</div>
+        <div class="ruleInfo" v-for="(item, index) in orderRule" :key="index">
+          <span style="font-size: 12px; color: #b1a9a9">{{ index + 1 }}. {{ item }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- 放置每一个医院的数据 -->
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+//引入医院详情仓库的数据
+import useDetailStore from '@/store/modules/hospital_Datail.ts'
+import { onMounted, ref } from 'vue'
 
-<style scoped></style>
+const hospitalStore = useDetailStore()
+const orderRule = ref([])
+
+onMounted(() => {
+  getOrderRule()
+})
+const getOrderRule = () => {
+  const route = hospitalStore.hospitalInfo.orderRule
+  console.log(route)
+
+  if (route) {
+    const splitRoutes = route.split('.')
+    orderRule.value = splitRoutes
+    console.log(orderRule.value)
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.register {
+  .top {
+    display: flex;
+    .title {
+      color: #333;
+      font-size: 24px;
+      font-weight: 700;
+      margin-right: 15px;
+    }
+    .level {
+      display: flex;
+      align-items: center;
+      color: #b1a9a9;
+      font-size: 14px;
+    }
+  }
+  .content {
+    display: flex;
+    margin-top: 20px;
+    .left {
+      width: 100px;
+      img {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+      }
+    }
+    .right {
+      flex: 1;
+      margin-left: 20px;
+      cursor: pointer;
+      .rule {
+        margin-top: 10px;
+      }
+      .time,
+      .address,
+      .route,
+      .ruleInfo {
+        margin-top: 8px;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        width: 840px;
+        span {
+          span {
+            color: #b1a9a9;
+          }
+        }
+      }
+      .route {
+        color: #b1a9a9;
+      }
+      .ruleInfo {
+        margin-top: 10px;
+      }
+    }
+  }
+  .deparment {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    margin-top: 40px;
+    overflow: auto;
+    cursor: pointer;
+    .leftNav {
+      width: 140px;
+      height: 100%;
+      ul {
+        width: 100%;
+        background: rgb(248, 248, 248);
+        display: flex;
+        flex-direction: column;
+        li {
+          flex: 1;
+          text-align: center;
+          color: #7f7f7f;
+
+          line-height: 41.6px;
+          font-size: 14px;
+          font-weight: 700;
+          background: #f4f9ff;
+          &.active {
+            border-left: 1px solid red;
+            color: red;
+            background: white;
+          }
+          &.selected {
+            font-size: 16px;
+            color: black;
+          }
+        }
+      }
+    }
+    .deparmentInfo {
+      flex: 1;
+      margin-left: 20px;
+      height: 100%;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .showDeparment {
+        h1 {
+          display: flex;
+          align-items: center;
+          font-weight: 600;
+          color: black;
+        }
+        h1::before {
+          content: '';
+          width: 3px;
+          height: 15px;
+          background-color: blue;
+          border-radius: 30%;
+          display: inline-block;
+          margin-right: 10px;
+          margin-left: 5px;
+        }
+        ul {
+          margin-top: 20px;
+          margin-bottom: 30px;
+          display: flex;
+          flex-wrap: wrap;
+          margin-left: 5px;
+          li {
+            font-size: 14px;
+            color: #7f7f7f;
+            width: 33%;
+            line-height: 30px;
+            margin: 2px 0px;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
