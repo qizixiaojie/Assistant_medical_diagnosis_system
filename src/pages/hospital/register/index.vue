@@ -26,7 +26,6 @@
           <span><span>退号时间：</span>就诊前一工作日{{ hospitalStore.hospitalInfo.quitTime }}前取消</span>
         </div>
         <div class="route">
-          import { ref } from 'vue';
           <span><span>具体路线：</span>{{ hospitalStore.hospitalInfo.route }}</span>
         </div>
         <div class="rule" style="margin-top: 20px">医院预约规则</div>
@@ -52,12 +51,9 @@ onMounted(() => {
 })
 const getOrderRule = () => {
   const route = hospitalStore.hospitalInfo.orderRule
-  console.log(route)
-
   if (route) {
     const splitRoutes = route.split('.')
     orderRule.value = splitRoutes
-    console.log(orderRule.value)
   }
 }
 </script>
