@@ -1,5 +1,5 @@
 <template>
-  <div>医院界面</div>
+  <div>notice</div>
 </template>
 
 <script setup lang="ts"></script>

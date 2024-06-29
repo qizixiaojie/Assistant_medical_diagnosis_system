@@ -12,6 +12,7 @@ import Hospital_bottom from '@/components/hospital_bottom/index.vue'
 //引入elment-plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import pinia from "@/store/index.ts"
 //国际化语言
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 //挂载vue-router核心组件
@@ -28,6 +29,7 @@ app.use(router)
 app.use(ElementPlus, {
   locale: zhCn,
 })
+app.use(pinia)
 
 
 
