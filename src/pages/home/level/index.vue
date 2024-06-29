@@ -4,7 +4,7 @@
     <div class="content">
       <div class="left">等级：</div>
       <ul class="hospital">
-        <li class="active">全部</li>
+        <li class="active" @click="ALL">全部</li>
         <li :class="{ active: activeFlag == level }" v-for="level in levelArr" :key="level" @click="changeLevel(level)">
           <span>{{ level == '1' ? '三级甲等' : level == '2' ? '二级乙等' : level == '3' ? '一级丁等' : '未知等级' }}</span>
         </li>
@@ -19,6 +19,7 @@ import { reqHospital_Grade_Classify } from '@/api/hospital'
 import { onMounted, ref } from 'vue'
 //等级种类数据
 const levelArr = ref([])
+const $emit = defineEmits(['getLevel'])
 //控制高亮
 const activeFlag = ref<string>('')
 onMounted(() => {
@@ -34,6 +35,12 @@ const getLevel = async () => {
 // 点击等级的回调
 const changeLevel = (level: any) => {
   activeFlag.value = level
+  //触发自定义事件，将等级参数传递给父亲
+  $emit('getLevel', level)
+}
+//补充全部
+const ALL = () => {
+  $emit('getLevel', `''`)
 }
 </script>
 

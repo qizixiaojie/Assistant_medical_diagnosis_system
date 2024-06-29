@@ -8,9 +8,9 @@
   <el-row :gutter="50">
     <el-col :span="20">
       <!-- 等级 -->
-      <level />
+      <level @getLevel="getLevel" />
       <!-- 地区组件 -->
-      <region />
+      <region @getRegion="getRegion" />
       <!-- 展示医院组件 -->
       <div class="hospital">
         <card class="item" v-for="(item, index) in hospitalCarData" :key="index" :hospitalCarData="item" />
@@ -46,12 +46,18 @@ onMounted(() => {
 //分页器模块
 const pageNo = ref<number>(1)
 const pageSize = ref<number>(10) //显示多少个
+const hostype = ref('')
+const address = ref('')
 // 存储医院卡片数据
 const hospitalCarData = ref([])
 
 //获取卡片数据
 const getCarData = async () => {
-  const result = await reqHospital_Card(pageNo.value, pageSize.value)
+  if (hostype.value == '') {
+    hostype.value = `''`
+    address.value = `''`
+  }
+  const result = await reqHospital_Card(pageNo.value, pageSize.value, hostype.value, address.value)
   if (result.code) {
     hospitalCarData.value = result.data
   }
@@ -65,6 +71,18 @@ const currentChange = () => {
 const sizeChange = () => {
   //当前页面回归第一页
   pageNo.value = 1
+  getCarData()
+}
+//获取子组件的数据，儿子给父亲传递过来的等级参数
+const getLevel = (level: string) => {
+  //手机等级参数
+  hostype.value = level
+  //再次发起请求
+  getCarData()
+}
+//同上不过是地址
+const getRegion=(region: string) => {
+  address.value = region
   getCarData()
 }
 </script>
