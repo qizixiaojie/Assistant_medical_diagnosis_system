@@ -4,7 +4,7 @@
     <div class="content">
       <div class="left">等级：</div>
       <ul class="hospital">
-        <li class="active" @click="ALL">全部</li>
+        <li :class="{ active: activeFlag == '' }" @click="ALL">全部</li>
         <li :class="{ active: activeFlag == level }" v-for="level in levelArr" :key="level" @click="changeLevel(level)">
           <span>{{ level == '1' ? '三级甲等' : level == '2' ? '二级乙等' : level == '3' ? '一级丁等' : '未知等级' }}</span>
         </li>
@@ -40,6 +40,7 @@ const changeLevel = (level: any) => {
 }
 //补充全部
 const ALL = () => {
+  activeFlag.value = ''
   $emit('getLevel', `''`)
 }
 </script>

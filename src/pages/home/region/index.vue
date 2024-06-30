@@ -4,7 +4,9 @@
       <div class="left">地区:</div>
       <ul>
         <li @click="ALL" :class="{ active: RegionFlage == '' }">全部</li>
-        <li v-for="item in regionArr.slice(0, 10)" :key="item" :class="{ active: RegionFlage == item }" @click="changeRegion(item)">{{ item }}</li>
+        <li v-for="item in regionArr.slice(0, 10)" :key="item" :class="{ active: RegionFlage == item }" @click="changeRegion(item)">
+          {{ item }}
+        </li>
       </ul>
     </div>
   </div>
@@ -36,6 +38,7 @@ const changeRegion = (item: any) => {
 }
 //补充全部
 const ALL = () => {
+  RegionFlage.value = ''
   $emit('getRegion', `''`)
 }
 </script>

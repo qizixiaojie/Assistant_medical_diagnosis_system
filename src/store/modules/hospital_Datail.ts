@@ -12,7 +12,6 @@ const useDetailStore = defineStore("Detail", {
     //获取医院详情的方法
     async getHospital(hoscode: string) {
       const result = await reqHospital_Detail(hoscode)
-      console.log('11111111111111');
 
       if (result.code == 200) {
         this.hospitalInfo = result.data[0]

@@ -13,7 +13,10 @@ import Login from '@/components/login/index.vue'
 //引入elment-plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+
+//引入pinia持久化插件
 import pinia from "@/store/index.ts"
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 //国际化语言
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 //挂载vue-router核心组件
@@ -32,7 +35,8 @@ app.use(ElementPlus, {
   locale: zhCn,
 })
 app.use(pinia)
-
+//持久化仓库
+pinia.use(piniaPluginPersistedstate)
 
 
 app.mount("#app")
