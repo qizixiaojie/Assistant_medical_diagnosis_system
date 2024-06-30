@@ -10,7 +10,7 @@
       <div class="right">
         <p class="help">帮助中心</p>
         <!-- 如果有用户的基本信息 -->
-        <p class="login">登入/注册中心</p>
+        <p class="login" @click="login">登入/注册中心</p>
         <!-- 如果没有用户信息 -->
         <!-- <p class="login" v-else>
           <el-dropdown>
@@ -37,11 +37,16 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-
+import useUserStore from '@/store/modules/interface/user'
+const userStore = useUserStore()
 const $router = useRouter()
 //去往首页
 const goHome = () => {
   $router.push({ path: '/home' })
+}
+//点击登录与注册按钮的时候弹出对话框
+const login = () => {
+  userStore.visiable = true
 }
 </script>
 

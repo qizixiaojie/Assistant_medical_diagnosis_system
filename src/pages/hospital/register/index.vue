@@ -35,6 +35,27 @@
       </div>
     </div>
     <!-- 放置每一个医院的数据 -->
+    <div class="deparment">
+      <div class="leftNav">
+        <ul>
+          <li v-for="(deparment, index) in hospitalStore.hospitalInfo.departmentsArr" :key="deparment.depcode" @click="changeIndex(index)" :class="{ active: index == currentIndex, selected: index == currentIndex }">
+            {{ deparment.depname }}
+          </li>
+        </ul>
+      </div>
+      <div class="deparmentInfo">
+        <!-- 用一个div代表:大科室与小科室 -->
+        <div class="showDeparment" v-for="deparment in hospitalStore.hospitalInfo.departmentsArr" :key="deparment.depcode">
+          <h1 class="cur">{{ deparment.depname }}</h1>
+          <!-- 每一个大的科室下小科室 -->
+          <ul>
+            <li @click="login" v-for="item in deparment.children" :key="item.sub_depcode">
+              {{ item.sub_depname }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,19 +63,43 @@
 //引入医院详情仓库的数据
 import useDetailStore from '@/store/modules/hospital_Datail.ts'
 import { onMounted, ref } from 'vue'
+//获取user仓库下面的数据visable，可以控制Login组件的对话框
+import useUserStore from '@/store/modules/interface/user'
 
+const userStore = useUserStore()
 const hospitalStore = useDetailStore()
 const orderRule = ref([])
 
 onMounted(() => {
   getOrderRule()
 })
+// 对预约规则进行拆解
 const getOrderRule = () => {
-  const route = hospitalStore.hospitalInfo.orderRule
-  if (route) {
-    const splitRoutes = route.split('.')
+  const Rule = hospitalStore.hospitalInfo.orderRule
+  if (Rule) {
+    const splitRoutes = Rule.split('.')
     orderRule.value = splitRoutes
   }
+}
+
+//控制科室高亮的响应式数据
+let currentIndex = ref<number>(0)
+//左侧大的科室点击的事件
+const changeIndex = (index: number) => {
+  console.log(hospitalStore.deparmentArr)
+
+  currentIndex.value = index
+  //点击导航获取右侧科室(大的科室H1标题)
+  const allH1 = document.querySelectorAll('.cur')
+  //滚动到对应科室的位置
+  allH1[currentIndex.value].scrollIntoView({
+    behavior: 'smooth', //过渡动画效果
+    block: 'start' //滚动到位置 默认起始位置
+  })
+}
+//点击登录与注册按钮的时候弹出对话框
+const login = () => {
+  userStore.visiable = true
 }
 </script>
 

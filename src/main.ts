@@ -8,6 +8,7 @@ import App from '@/App.vue'
 //挂载全局组件
 import Hospital_top from '@/components/hospital_top/index.vue'
 import Hospital_bottom from '@/components/hospital_bottom/index.vue'
+import Login from '@/components/login/index.vue'
 
 //引入elment-plus
 import ElementPlus from 'element-plus'
@@ -22,6 +23,7 @@ import router from '@/route'
 const app = createApp(App)
 app.component('Hospital_top', Hospital_top)
 app.component('Hospital_bottom', Hospital_bottom)
+app.component('Login', Login)
 
 //安装vue-router
 app.use(router)

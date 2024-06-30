@@ -8,6 +8,7 @@
     </div>
     <!-- 底部组件 -->
     <Hospital_bottom />
+    <Login v-if="true" />
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-import { reqHospital_Detail } from "@/api/hospital_import";
+import { reqHospital_Depart, reqHospital_Detail } from "@/api/hospital_import";
 import { defineStore } from "pinia"
 
 const useDetailStore = defineStore("Detail", {
@@ -12,10 +12,17 @@ const useDetailStore = defineStore("Detail", {
     //获取医院详情的方法
     async getHospital(hoscode: string) {
       const result = await reqHospital_Detail(hoscode)
+      console.log('11111111111111');
+
       if (result.code == 200) {
         this.hospitalInfo = result.data[0]
       }
     },
+    async getHospitalDepart() {
+      const result = await reqHospital_Depart()
+      this.hospitalInfo.departmentsArr = result.data
+
+    }
   },
   getters: {}
 })

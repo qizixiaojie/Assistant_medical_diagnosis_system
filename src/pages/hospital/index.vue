@@ -8,7 +8,11 @@
       </div>
 
       <el-menu :default-active="$route.path" class="el-menu-vertical-demo el-menu">
-        <el-menu-item index="/hospital/register" @click="changeActive('/hospital/register')" class="el-menu-item">
+        <el-menu-item
+          index="/hospital/register"
+          @click="changeActive('/hospital/register')"
+          class="el-menu-item"
+        >
           <el-icon><icon-menu /></el-icon>
           <span :class="{ span: isActive == '/hospital/register' }">预约挂号</span>
         </el-menu-item>
@@ -39,27 +43,35 @@
 
 <script setup lang="ts">
 //左侧的小图标
-import { Document, Menu as IconMenu, Setting, InfoFilled, Search, HomeFilled } from '@element-plus/icons-vue'
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import {
+  Document,
+  Menu as IconMenu,
+  Setting,
+  InfoFilled,
+  Search,
+  HomeFilled,
+} from "@element-plus/icons-vue";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 // 仓库
-import useDetailStore from '@/store/modules/hospital_Datail.ts'
-const detailStore = useDetailStore()
+import useDetailStore from "@/store/modules/hospital_Datail.ts";
+const detailStore = useDetailStore();
 //导入路由组件
-const $router = useRouter()
+const $router = useRouter();
 //获取当前用户信息
-const $route = useRoute()
+const $route = useRoute();
 onMounted(async () => {
-  await detailStore.getHospital($route.query.hoscode as string)
-})
+  await detailStore.getHospital($route.query.hoscode as string);
+  detailStore.getHospitalDepart();
+});
 
 //路由跳转事件
 //为路由添加样式
-const isActive = ref('')
+const isActive = ref("");
 const changeActive = (path: string) => {
-  $router.push({ path: `${path}`, query: { hoscode: $route.query.hoscode } })
-  isActive.value = path
-}
+  $router.push({ path: `${path}`, query: { hoscode: $route.query.hoscode } });
+  isActive.value = path;
+};
 </script>
 
 <style scoped lang="scss">
@@ -83,7 +95,7 @@ const changeActive = (path: string) => {
       .el-menu-item {
         margin-top: 20px;
         .span::after {
-          content: '';
+          content: "";
           top: 24px;
           position: absolute;
           left: 0;
