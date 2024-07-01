@@ -1,6 +1,6 @@
 <template>
   <div class="login_container">
-    <el-dialog v-model="isRegister" title="用户注册" width="500">
+    <el-dialog v-model="isRegister" title="用户注册" width="500" @close="close">
       <!-- 对话框进行规划 -->
       <el-row>
         <!-- 左侧节后：收集号码登录，微信扫一扫登录 -->
@@ -49,18 +49,10 @@
         </el-col>
       </el-row>
       <template #footer>
-        <el-button
-          size="default"
-          @click="
-            () => {
-              userStore.visiable = false
-            }
-          "
-          >关闭窗口</el-button
-        >
+        <el-button size="default" @click="close">关闭窗口</el-button>
       </template>
     </el-dialog>
-    <el-dialog v-model="userStore.visiable" title="用户登录" width="500">
+    <el-dialog v-model="userStore.visiable" title="用户登录" width="500" @close="close">
       <!-- 对话框进行规划 -->
       <el-row>
         <!-- 左侧节后：收集号码登录，微信扫一扫登录 -->
@@ -111,18 +103,10 @@
         </el-col>
       </el-row>
       <template #footer>
-        <el-button
-          size="default"
-          @click="
-            () => {
-              userStore.visiable = false
-            }
-          "
-          >关闭窗口</el-button
-        >
+        <el-button size="default" @click="close">关闭窗口</el-button>
       </template>
     </el-dialog>
-    <el-dialog v-model="isLogout" title="忘记密码" width="500">
+    <el-dialog v-model="isLogout" title="忘记密码" width="500" @close="close">
       <!-- 对话框进行规划 -->
       <el-row>
         <!-- 左侧节后：收集号码登录，微信扫一扫登录 -->
@@ -171,15 +155,7 @@
         </el-col>
       </el-row>
       <template #footer>
-        <el-button
-          size="default"
-          @click="
-            () => {
-              userStore.visiable = false
-            }
-          "
-          >关闭窗口</el-button
-        >
+        <el-button size="default" @click="close">关闭窗口</el-button>
       </template>
     </el-dialog>
     <el-dialog v-model="scene" title="微信扫码登录" width="250">
@@ -230,8 +206,6 @@ const userRegister = (registerRef: any) => {
       isRegister.value = false
       isLogout.value = false
       userStore.userRegister(isRegisterData)
-
-      //调用注册接口
     } else {
       ElMessage({
         message: '请你重新输入',
@@ -267,7 +241,6 @@ const userLogin = (loginRef: any) => {
       isRegister.value = false
       isLogout.value = false
       userStore.userLogin(isLoginData)
-      //调用注册接口
     } else {
       ElMessage({
         message: '请你重新输入',
@@ -341,7 +314,17 @@ const changeScene = () => {
   userStore.visiable = false
   isRegister.value = false
   isLogout.value = false
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+}
+
+//关闭窗口
+const close = () => {
+  userStore.visiable = false
+  isRegisterData.registerName = ''
+  isRegisterData.registerPassword = ''
+  isLoginData.loginName = ''
+  isLoginData.loginPassword = ''
+  isLogoutData.logoutName = ''
+  isLogoutData.logoutPassword = ''
 }
 </script>
 <script lang="ts">
