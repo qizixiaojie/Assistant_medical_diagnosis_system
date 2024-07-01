@@ -1,3 +1,4 @@
+import useUserStore from '@/store/modules/interface/user';
 import axios from 'axios';
 import { ElMessage } from 'element-plus'; // 确保已正确安装和引入Element Plus  
 // import useUserStore from '@/store/modules/interface/user'; // 如果需要，取消注释并正确使用  
@@ -8,10 +9,15 @@ const request = axios.create({
 });
 
 // 请求拦截器（如果需要，取消注释并正确使用）  
-request.interceptors.request.use((config) => {  
+request.interceptors.request.use((config) => {
+  const userStore = useUserStore()
+  //token是公共参数，如果用户登录了需要携带
+  if (userStore.userInfo.token) {
+    config.headers.token = userStore.userInfo.token
+  }
   // ...  
-  return config;  
-});  
+  return config;
+});
 
 // 响应拦截器  
 request.interceptors.response.use((response) => {

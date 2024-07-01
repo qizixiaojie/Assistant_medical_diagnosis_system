@@ -319,12 +319,6 @@ const changeScene = () => {
 //关闭窗口
 const close = () => {
   userStore.visiable = false
-  isRegisterData.registerName = ''
-  isRegisterData.registerPassword = ''
-  isLoginData.loginName = ''
-  isLoginData.loginPassword = ''
-  isLogoutData.logoutName = ''
-  isLogoutData.logoutPassword = ''
 }
 </script>
 <script lang="ts">

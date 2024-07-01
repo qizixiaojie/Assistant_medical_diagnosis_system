@@ -10,26 +10,26 @@
       <div class="right">
         <p class="help">帮助中心</p>
         <!-- 如果有用户的基本信息 -->
-        <p class="login" @click="login">登入/注册中心</p>
+        <p class="login" @click="login" v-if="!userStore.userInfo.userName">登入/注册中心</p>
         <!-- 如果没有用户信息 -->
-        <!-- <p class="login" v-else>
+        <p class="login" v-else>
           <el-dropdown>
-            <span class="el-dropdown-link">
-             名字
+            <span class="el-dropdown-link" style="margin-top: 4px">
+              {{ userStore.userInfo.userName }}
               <el-icon class="el-icon--right">
                 <arrow-down />
               </el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item >实名认证</el-dropdown-item>
-                <el-dropdown-item >挂号订单</el-dropdown-item>
-                <el-dropdown-item >就诊人管理</el-dropdown-item>
-                <el-dropdown-item>退出登录</el-dropdown-item>
+                <el-dropdown-item>实名认证</el-dropdown-item>
+                <el-dropdown-item>挂号订单</el-dropdown-item>
+                <el-dropdown-item>就诊人管理</el-dropdown-item>
+                <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-        </p> -->
+        </p>
       </div>
     </div>
   </div>
@@ -47,6 +47,11 @@ const goHome = () => {
 //点击登录与注册按钮的时候弹出对话框
 const login = () => {
   userStore.visiable = true
+}
+//点击退出登录清除数据
+const logout = () => {
+  userStore.logout()
+  $router.push({ path: '/home' })
 }
 </script>
 

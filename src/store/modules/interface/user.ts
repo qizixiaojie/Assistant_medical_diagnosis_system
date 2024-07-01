@@ -1,13 +1,16 @@
 import { reqUserLogin, reqUserLogout, reqUserRegister } from '@/api/user';
 import { ElMessage } from 'element-plus';
 import { defineStore } from 'pinia'
-
+interface userInfo {
+  token: string,
+  userName: string
+}
 
 const useUserStore = defineStore('User', {
   state: () => {
     return {
       visiable: false, //控制用户登录组件的显示和isFormData: any隐藏
-      userInfo: {}
+      userInfo: {} as userInfo
     }
   },
   actions: {
@@ -62,6 +65,12 @@ const useUserStore = defineStore('User', {
         });
       } else {
         alert('你输入的名字不对或者密码不符合要求' + Data)
+      }
+    },
+    logout() {
+      this.userInfo = {
+        token: '',
+        userName: ''
       }
     }
   },

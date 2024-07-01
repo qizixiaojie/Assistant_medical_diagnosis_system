@@ -13,13 +13,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, 'src'),
     }
   },
-  // // 配置代理跨域
   // server: {
   //   proxy: {
-  //     '/qzxj': {
-  //       target: 'http://localhost:3000/',
-  //       //是否更改请求地址
-  //       changeOrigin: true,
+  //     '/api': { // 获取请求中带 /api 的请求
+  //       target: 'http://localhost:8080',  // 后台服务器的源
+  //       changeOrigin: true,   // 修改源
+  //       rewrite: (path) => path.replace(/^\/api/, "")   //  /api 替换为空字符串
   //     }
   //   }
   // }

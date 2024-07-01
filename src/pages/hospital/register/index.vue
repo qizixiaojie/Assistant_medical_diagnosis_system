@@ -49,7 +49,7 @@
           <h1 class="cur">{{ deparment.depname }}</h1>
           <!-- 每一个大的科室下小科室 -->
           <ul>
-            <li @click="login" v-for="item in deparment.children" :key="item.sub_depcode">
+            <li @click="login(item)" v-for="item in deparment.children" :key="item.sub_depcode">
               {{ item.sub_depname }}
             </li>
           </ul>
@@ -65,10 +65,15 @@ import useDetailStore from '@/store/modules/hospital_Datail.ts'
 import { onMounted, ref } from 'vue'
 //获取user仓库下面的数据visable，可以控制Login组件的对话框
 import useUserStore from '@/store/modules/interface/user'
+//导入路由
+import { useRoute, useRouter } from 'vue-router'
 
 const userStore = useUserStore()
 const hospitalStore = useDetailStore()
 const orderRule = ref([])
+//获当前路由对象
+const $route = useRoute()
+const $router = useRouter()
 
 onMounted(() => {
   getOrderRule()
@@ -86,8 +91,6 @@ const getOrderRule = () => {
 let currentIndex = ref<number>(0)
 //左侧大的科室点击的事件
 const changeIndex = (index: number) => {
-  console.log(hospitalStore.deparmentArr)
-
   currentIndex.value = index
   //点击导航获取右侧科室(大的科室H1标题)
   const allH1 = document.querySelectorAll('.cur')
@@ -98,8 +101,16 @@ const changeIndex = (index: number) => {
   })
 }
 //点击登录与注册按钮的时候弹出对话框
-const login = () => {
-  userStore.visiable = true
+const login = (item: any) => {
+  console.log(item)
+  if (userStore.userInfo.userName) {
+    $router.push({
+      path: '/hospital/register_rule_step1',
+      query: { hoscode: $route.query.hoscode, sub_depcode: item.sub_depcode }
+    })
+  } else {
+    userStore.visiable = false
+  }
 }
 </script>
 

@@ -8,11 +8,14 @@
     </div>
     <!-- 底部组件 -->
     <Hospital_bottom />
-    <Login v-if="true" />
+    <Login v-if="userStore.visiable" />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import useUserStore from '@/store/modules/interface/user'
+const userStore = useUserStore()
+</script>
 
 <style scoped lang="scss">
 .container {
