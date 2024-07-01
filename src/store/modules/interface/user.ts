@@ -1,4 +1,4 @@
-import { reqUserLogin, reqUserRegister } from '@/api/user';
+import { reqUserLogin, reqUserLogout, reqUserRegister } from '@/api/user';
 import { ElMessage } from 'element-plus';
 import { defineStore } from 'pinia'
 
@@ -24,7 +24,7 @@ const useUserStore = defineStore('User', {
           type: "success",
         });
       } else {
-        alert('手机登录失败' + isFormData)
+        alert('登录失败' + isFormData)
       }
     },
     //用户登入
@@ -36,6 +36,7 @@ const useUserStore = defineStore('User', {
       const result: any = await reqUserLogin(Data)
 
       if (result.code == 200) {
+        //持久化存储
         this.userInfo = result.data
         ElMessage({
           message: "登录成功",
@@ -45,6 +46,22 @@ const useUserStore = defineStore('User', {
 
       } else {
         alert('手机登录失败' + isFormData)
+      }
+    },
+    async userLogout(isFormData: any) {
+
+      const Data = {
+        userName: isFormData.logoutName,
+        newPassword: isFormData.logoutPassword
+      }
+      const result: any = await reqUserLogout(Data)
+      if (result.code == 200) {
+        ElMessage({
+          message: "修改密码成功，请登入",
+          type: "success",
+        });
+      } else {
+        alert('你输入的名字不对或者密码不符合要求' + Data)
       }
     }
   },

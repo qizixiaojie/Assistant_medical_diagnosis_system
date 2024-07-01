@@ -14,6 +14,6 @@ export const reqUserRegister = ({ userName, passWord }: any) => request.post(API
 //用户登录接口
 export const reqUserLogin = ({ userName, passWord }: any) => request.post(API.USER_LOGIN, { userName, passWord })
 //用户忘记密码接口
-export const reqUserLogout = () => request.post(API.USER_LOGOUT)
+export const reqUserLogout = ({ userName, newPassword }: any) => request.post(API.USER_LOGOUT, { userName, newPassword })
 
 

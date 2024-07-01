@@ -69,10 +69,10 @@
             <div>
               <el-form :model="isLoginData" :rules="isLoginRules" ref="loginRef">
                 <el-form-item prop="loginName">
-                  <el-input style="margin-top: 30px" placeholder="请输入您的手机号码" :prefix-icon="User" v-model="isLoginData.loginName"></el-input>
+                  <el-input style="margin-top: 30px" placeholder="请输入您的名字" :prefix-icon="User" v-model="isLoginData.loginName"></el-input>
                 </el-form-item>
                 <el-form-item prop="loginPassword">
-                  <el-input placeholder="请输入您的手机验证码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isLoginData.loginPassword"></el-input>
+                  <el-input placeholder="请输入您的密码" type="password" show-password style="margin-top: 30px" :prefix-icon="Lock" v-model="isLoginData.loginPassword"></el-input>
                 </el-form-item>
               </el-form>
               <div class="bottom">
@@ -129,19 +129,16 @@
         <el-col :span="12">
           <div class="login">
             <div>
-              <el-form :model="isLogoutData" ref="logoutRef">
+              <el-form :model="isLogoutData" :rules="isLogoutRules" ref="logoutRef">
                 <el-form-item prop="logoutName">
-                  <el-input style="margin-top: 30px" placeholder="请输入您的手机号码" :prefix-icon="User" v-model="isLogoutData.logoutName"></el-input>
+                  <el-input style="margin-top: 30px" placeholder="请输入您的名字" :prefix-icon="User" v-model="isLogoutData.logoutName"></el-input>
                 </el-form-item>
                 <el-form-item prop="logoutPassword">
-                  <el-input placeholder="请输入您的手机验证码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isLogoutData.logoutPassword"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-button style="margin-top: 20px">获取验证码</el-button>
+                  <el-input placeholder="请输入您新的密码" style="margin-top: 30px" :prefix-icon="Lock" v-model="isLogoutData.logoutPassword"></el-input>
                 </el-form-item>
               </el-form>
               <div class="bottom">
-                <el-button style="width: 100%" type="primary" szie="default" @click="userLogin">用户登录</el-button>
+                <el-button style="width: 100%" type="primary" szie="default" @click="changePassword(logoutRef)">修改密码</el-button>
                 <div @click="changeScene">
                   <img src="@/assets/images/user_微信.png" style="width: 32px" />
                   <p>微信扫码登录</p>
@@ -185,6 +182,12 @@
         >
       </template>
     </el-dialog>
+    <el-dialog v-model="scene" title="微信扫码登录" width="250">
+      <div class="webchat" v-show="scene" style="text-align: center">
+        <img src="@/assets/images/二维码_登入.png" />
+        <p style="color: #b1a9a9; cursor: pointer; margin-bottom: 40px" @click="tranLogin">密码 登录</p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -219,7 +222,7 @@ const isRegisterRules = reactive({
 //控制注册还是登录
 const isRegister = ref(false)
 const isLogout = ref(false)
-//切换用户注册
+//用户注册
 const userRegister = (registerRef: any) => {
   registerRef.validate((valid: any) => {
     if (valid) {
@@ -255,17 +258,15 @@ const isLoginRules = reactive({
     { min: 6, max: 18, message: '密码长度应为6-18个字符', trigger: 'blur' }
   ]
 })
-//切换用户登录
+// 用户登录
 const userLogin = (loginRef: any) => {
+  console.log(isLogoutData)
   loginRef.validate((valid: any) => {
     if (valid) {
-      console.log(isLoginData)
-
       userStore.visiable = true
       isRegister.value = false
       isLogout.value = false
       userStore.userLogin(isLoginData)
-
       //调用注册接口
     } else {
       ElMessage({
@@ -283,6 +284,33 @@ const isLogoutData = reactive({
   logoutName: '',
   logoutPassword: ''
 })
+const isLogoutRules = reactive({
+  logoutName: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 6, max: 18, message: '用户名长度应为6-18个字符', trigger: 'blur' }
+  ],
+  logoutPassword: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, max: 18, message: '密码长度应为6-18个字符', trigger: 'blur' }
+  ]
+})
+const changePassword = (logoutRef: any) => {
+  console.log(isLogoutData)
+  logoutRef.validate((valid: any) => {
+    if (valid) {
+      userStore.visiable = true
+      isRegister.value = false
+      isLogout.value = false
+      userStore.userLogout(isLogoutData)
+      //调用注册接口
+    } else {
+      ElMessage({
+        message: '请你重新输入',
+        type: 'error'
+      })
+    }
+  })
+}
 
 //切换忘记密码
 const userForget = () => {
@@ -297,13 +325,23 @@ const registeRuser = () => {
   isRegister.value = true
   isLogout.value = false
 }
+const tranLogin = () => {
+  scene.value = false
+  userStore.visiable = true
+  isRegister.value = false
+  isLogout.value = false
+}
 //控制微信扫码登录的
-const scene = ref<number>(1) //0代表收集号码注册  如果是1 微信扫码登录  如果 2 忘记密码
+const scene = ref(false) //0代表收集号码注册  如果是1 微信扫码登录  如果 2 忘记密码
 
 //点击微信扫码登录|微信小图标切换为微信扫码登录
 const changeScene = () => {
   //微信扫码登录需要一些费用，暂时不适用
-  scene.value = 0
+  scene.value = true
+  userStore.visiable = false
+  isRegister.value = false
+  isLogout.value = false
+  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 }
 </script>
 <script lang="ts">
