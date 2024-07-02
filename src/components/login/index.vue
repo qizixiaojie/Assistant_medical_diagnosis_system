@@ -419,6 +419,7 @@ const changeScene = () => {
 //关闭窗口
 const close = () => {
   userStore.visiable = false;
+  // 退出之后清空表单
   isLoginData.loginName = "";
   isLoginData.loginPassword = "";
   isRegisterData.registerName = "";
