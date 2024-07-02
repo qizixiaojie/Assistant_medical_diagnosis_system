@@ -6,7 +6,15 @@
       </div>
       <div class="level">
         <img src="@/assets/images/hospital_点赞赞.png" style="width: 20px" />&nbsp;
-        <span>{{ hospitalStore.hospitalInfo.hostype == '1' ? '三级甲等' : hospitalStore.hospitalInfo.hostype == '2' ? '二级乙等' : hospitalStore.hospitalInfo.hostype == '3' ? '一级丁等' : '未知等级' }}</span>
+        <span>{{
+          hospitalStore.hospitalInfo.hostype == "1"
+            ? "三级甲等"
+            : hospitalStore.hospitalInfo.hostype == "2"
+            ? "二级乙等"
+            : hospitalStore.hospitalInfo.hostype == "3"
+            ? "一级丁等"
+            : "未知等级"
+        }}</span>
       </div>
     </div>
     <!-- 展示内容区域 -->
@@ -18,12 +26,19 @@
         <div class="rule">挂号规则</div>
         <div class="time">
           <span><span>预约周期：</span>10天</span>
-          <span><span>放号时间：</span>{{ hospitalStore.hospitalInfo.daily_release_time }}</span>
+          <span
+            ><span>放号时间：</span
+            >{{ hospitalStore.hospitalInfo.daily_release_time }}</span
+          >
           <span><span>停挂时间：</span>{{ hospitalStore.hospitalInfo.stopOrder }}</span>
         </div>
         <div class="address">
           <span><span>具体地址：</span>{{ hospitalStore.hospitalInfo.address }}</span>
-          <span><span>退号时间：</span>就诊前一工作日{{ hospitalStore.hospitalInfo.quitTime }}前取消</span>
+          <span
+            ><span>退号时间：</span>就诊前一工作日{{
+              hospitalStore.hospitalInfo.quitTime
+            }}前取消</span
+          >
         </div>
         <div class="route">
           <span><span>具体路线：</span>{{ hospitalStore.hospitalInfo.route }}</span>
@@ -38,18 +53,31 @@
     <div class="deparment">
       <div class="leftNav">
         <ul>
-          <li v-for="(deparment, index) in hospitalStore.hospitalInfo.departmentsArr" :key="deparment.depcode" @click="changeIndex(index)" :class="{ active: index == currentIndex, selected: index == currentIndex }">
+          <li
+            v-for="(deparment, index) in hospitalStore.hospitalInfo.departmentsArr"
+            :key="deparment.depcode"
+            @click="changeIndex(index)"
+            :class="{ active: index == currentIndex, selected: index == currentIndex }"
+          >
             {{ deparment.depname }}
           </li>
         </ul>
       </div>
       <div class="deparmentInfo">
         <!-- 用一个div代表:大科室与小科室 -->
-        <div class="showDeparment" v-for="deparment in hospitalStore.hospitalInfo.departmentsArr" :key="deparment.depcode">
+        <div
+          class="showDeparment"
+          v-for="deparment in hospitalStore.hospitalInfo.departmentsArr"
+          :key="deparment.depcode"
+        >
           <h1 class="cur">{{ deparment.depname }}</h1>
           <!-- 每一个大的科室下小科室 -->
           <ul>
-            <li @click="login(item)" v-for="item in deparment.children" :key="item.sub_depcode">
+            <li
+              @click="login(item)"
+              v-for="item in deparment.children"
+              :key="item.sub_depcode"
+            >
               {{ item.sub_depname }}
             </li>
           </ul>
@@ -61,57 +89,62 @@
 
 <script setup lang="ts">
 //引入医院详情仓库的数据
-import useDetailStore from '@/store/modules/hospital_Datail.ts'
-import { onMounted, ref } from 'vue'
+import useDetailStore from "@/store/modules/hospital_Datail.ts";
+import { onMounted, ref } from "vue";
 //获取user仓库下面的数据visable，可以控制Login组件的对话框
-import useUserStore from '@/store/modules/interface/user'
+import useUserStore from "@/store/modules/interface/user";
 //导入路由
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
 
-const userStore = useUserStore()
-const hospitalStore = useDetailStore()
-const orderRule = ref([])
+const userStore = useUserStore();
+const hospitalStore = useDetailStore();
+const orderRule = ref([]);
 //获当前路由对象
-const $route = useRoute()
-const $router = useRouter()
+const $route = useRoute();
+const $router = useRouter();
 
 onMounted(() => {
-  getOrderRule()
-})
+  getOrderRule();
+});
 // 对预约规则进行拆解
 const getOrderRule = () => {
-  const Rule = hospitalStore.hospitalInfo.orderRule
+  const Rule = hospitalStore.hospitalInfo.orderRule;
   if (Rule) {
-    const splitRoutes = Rule.split('.')
-    orderRule.value = splitRoutes
+    const splitRoutes = Rule.split(".");
+    orderRule.value = splitRoutes;
   }
-}
+};
 
 //控制科室高亮的响应式数据
-let currentIndex = ref<number>(0)
+let currentIndex = ref<number>(0);
 //左侧大的科室点击的事件
 const changeIndex = (index: number) => {
-  currentIndex.value = index
+  currentIndex.value = index;
   //点击导航获取右侧科室(大的科室H1标题)
-  const allH1 = document.querySelectorAll('.cur')
+  const allH1 = document.querySelectorAll(".cur");
   //滚动到对应科室的位置
   allH1[currentIndex.value].scrollIntoView({
-    behavior: 'smooth', //过渡动画效果
-    block: 'start' //滚动到位置 默认起始位置
-  })
-}
+    behavior: "smooth", //过渡动画效果
+    block: "start", //滚动到位置 默认起始位置
+  });
+};
 //点击登录与注册按钮的时候弹出对话框
 const login = (item: any) => {
-  console.log(item)
+  console.log(item);
   if (userStore.userInfo.userName) {
     $router.push({
-      path: '/hospital/register_rule_step1',
-      query: { hoscode: $route.query.hoscode, sub_depcode: item.sub_depcode }
-    })
+      path: "/hospital/register_rule_step1",
+      query: { hoscode: $route.query.hoscode, sub_depcode: item.sub_depcode },
+    });
   } else {
-    userStore.visiable = false
+    ElMessage({
+      message: "您未登录",
+      type: "error",
+    });
+    userStore.visiable = true;
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -224,7 +257,7 @@ const login = (item: any) => {
           color: black;
         }
         h1::before {
-          content: '';
+          content: "";
           width: 3px;
           height: 15px;
           background-color: blue;

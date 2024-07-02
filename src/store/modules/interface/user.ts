@@ -22,6 +22,7 @@ const useUserStore = defineStore('User', {
       }
       const result: any = await reqUserRegister(Data)
       if (result.code == 200) {
+        this.visiable = false
         ElMessage({
           message: "注册成功，请登入",
           type: "success",
