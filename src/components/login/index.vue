@@ -260,11 +260,7 @@ import { User, Lock } from "@element-plus/icons-vue";
 
 //获取user仓库下面的数据visable，可以控制Login组件的对话框
 import useUserStore from "@/store/modules/interface/user";
-<<<<<<< HEAD
 import { reactive, ref } from "vue";
-=======
-import { reactive, ref, watch } from "vue";
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
 import { ElMessage } from "element-plus";
 const userStore = useUserStore();
 
@@ -290,17 +286,6 @@ const isRegisterRules = reactive({
 //控制注册还是登录
 const isRegister = ref(false);
 const isLogout = ref(false);
-<<<<<<< HEAD
-=======
-
-watch(
-  () => isRegister.value,
-  (val, oVal) => {
-    console.log(val, oVal);
-  }
-);
-
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
 //用户注册
 const userRegister = (registerRef: any) => {
   registerRef.validate((valid: any) => {
@@ -309,11 +294,8 @@ const userRegister = (registerRef: any) => {
       isRegister.value = false;
       isLogout.value = false;
       userStore.userRegister(isRegisterData);
-<<<<<<< HEAD
       isRegisterData.registerName = "";
       isRegisterData.registerPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
     } else {
       ElMessage({
         message: "请你重新输入",
@@ -349,11 +331,8 @@ const userLogin = (loginRef: any) => {
       isRegister.value = false;
       isLogout.value = false;
       userStore.userLogin(isLoginData);
-<<<<<<< HEAD
       isLoginData.loginName = "";
       isLogoutData.logoutPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
     } else {
       ElMessage({
         message: "请你重新输入",
@@ -388,11 +367,8 @@ const changePassword = (logoutRef: any) => {
       isRegister.value = false;
       isLogout.value = false;
       userStore.userLogout(isLogoutData);
-<<<<<<< HEAD
       isLogoutData.logoutName = "";
       isLogoutData.logoutPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
       //调用注册接口
     } else {
       ElMessage({
@@ -408,11 +384,8 @@ const userForget = () => {
   userStore.visiable = false;
   isRegister.value = false;
   isLogout.value = true;
-<<<<<<< HEAD
   isLoginData.loginName = "";
   isLoginData.loginPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
 };
 
 //切换注册用户
@@ -420,22 +393,16 @@ const registeRuser = () => {
   userStore.visiable = false;
   isRegister.value = true;
   isLogout.value = false;
-<<<<<<< HEAD
   isLoginData.loginName = "";
   isLoginData.loginPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
 };
 const tranLogin = () => {
   scene.value = false;
   userStore.visiable = true;
   isRegister.value = false;
   isLogout.value = false;
-<<<<<<< HEAD
   isLoginData.loginName = "";
   isLoginData.loginPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
 };
 //控制微信扫码登录的
 const scene = ref(false); //0代表收集号码注册  如果是1 微信扫码登录  如果 2 忘记密码
@@ -452,7 +419,6 @@ const changeScene = () => {
 //关闭窗口
 const close = () => {
   userStore.visiable = false;
-<<<<<<< HEAD
   // 退出之后清空表单
   isLoginData.loginName = "";
   isLoginData.loginPassword = "";
@@ -460,8 +426,6 @@ const close = () => {
   isRegisterData.registerPassword = "";
   isLogoutData.logoutName = "";
   isLogoutData.logoutPassword = "";
-=======
->>>>>>> 93b986dd465e2f16704def106652ab1e052c137d
 };
 </script>
 <script lang="ts">

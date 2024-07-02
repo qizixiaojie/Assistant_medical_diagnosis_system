@@ -38,6 +38,10 @@ export default createRouter({
         {
           path: 'register_rule_step1',
           component: () => import('@/pages/hospital/register/son/register_rule_step1.vue')
+        },
+        {
+          path: 'register_rule_step2',
+          component: () => import('@/pages/hospital/register/son/register_rule_step2.vue')
         }
       ]
     },

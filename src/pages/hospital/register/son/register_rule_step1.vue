@@ -12,17 +12,30 @@
     <div class="center">
       <h1>{{ nowTime }}</h1>
       <div class="container">
-        <div class="item" :class="{ active: item.state == 0 }" v-for="item in doctor.doctor_time" :key="item" @click="itemData(item)">
+        <div
+          class="item"
+          :class="{ active: item.state == 0 }"
+          v-for="item in doctor.doctor_time"
+          :key="item"
+          @click="itemData(item)"
+        >
           <div class="tops">
             {{ item.toDay }}
           </div>
           <div class="bottom">
             <div v-if="item.state == 0">没号了</div>
-            <div v-if="item.state == 1">有号({{ item.afternoonCount + item.morningCount }})</div>
+            <div v-if="item.state == 1">
+              有号({{ item.afternoonCount + item.morningCount }})
+            </div>
           </div>
         </div>
       </div>
-      <el-pagination v-model:current-page="pageNo" v-model:page-size="pageSize" layout=" prev, pager, next" :total="doctor.doctor_time.length" />
+      <el-pagination
+        v-model:current-page="pageNo"
+        v-model:page-size="pageSize"
+        layout=" prev, pager, next"
+        :total="doctor.doctor_time.length"
+      />
     </div>
 
     <!-- 展示医生的结构 -->
@@ -57,7 +70,12 @@
             <!-- 右侧挂号钱数 -->
             <div class="right">
               <div class="money">￥ {{ doctor.doctor.money }}</div>
-              <el-button type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px">
+              <el-button
+                type="primary"
+                size="default"
+                style="width: 140px; height: 40px; font-weight: 700; font-size: 16px"
+                @click="goPay()"
+              >
                 {{ `剩余：` + itemNowData.morningCount }}
               </el-button>
             </div>
@@ -82,7 +100,14 @@
             <!-- 右侧挂号钱数 -->
             <div class="right">
               <div class="money">￥{{ doctor.doctor.money }}</div>
-              <el-button type="primary" size="default" style="width: 140px; height: 40px; font-weight: 700; font-size: 16px"> {{ `剩余：` + itemNowData.afternoonCount }}</el-button>
+              <el-button
+                type="primary"
+                size="default"
+                @click="goPay()"
+                style="width: 140px; height: 40px; font-weight: 700; font-size: 16px"
+              >
+                {{ `剩余：` + itemNowData.afternoonCount }}</el-button
+              >
             </div>
           </div>
         </div>
@@ -92,50 +117,70 @@
 </template>
 
 <script setup lang="ts">
-import { reqHospital_Doctor_Detail } from '@/api/hospital_import'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { reqHospital_Doctor_Detail } from "@/api/hospital_import";
+import { onMounted, reactive, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 onMounted(() => {
-  getDoctorDetails()
-  getCurrentTime()
-})
-const $route = useRoute()
+  getDoctorDetails();
+  getCurrentTime();
+});
+const $route = useRoute();
 // 获取医院医生排班信息
 // 全部医生数据
-const doctor = ref()
+const doctor = ref();
 const getDoctorDetails = async () => {
-  const result: any = await reqHospital_Doctor_Detail($route.query)
+  const result: any = await reqHospital_Doctor_Detail($route.query);
   if (result.code == 200) {
-    doctor.value = result.data
-    console.log(doctor.value)
+    doctor.value = result.data;
+    console.log(doctor.value);
   }
-}
+};
 
 // 获取当前时间函数
-const nowTime = ref('')
+const nowTime = ref("");
 const getCurrentTime = () => {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
 
-  return (nowTime.value = `${year}年${month}月${day}日`)
-}
+  return (nowTime.value = `${year}年${month}月${day}日`);
+};
 // 当前页码
-const pageNo = ref(1)
-const pageSize = ref(7) //每条页面展示多少条数据
-const itemNowData = ref()
+const pageNo = ref(1);
+const pageSize = ref(7); //每条页面展示多少条数据
+const itemNowData = ref();
 const itemData = (item: any) => {
-  itemNowData.value = item
-  console.log(itemNowData.value)
-}
+  itemNowData.value = item;
+  console.log(itemNowData.value);
+};
+//去往支付页面
+//传递过去的数据
+const $router = useRouter();
+const dataPay = reactive({
+  date: "",
+  doctor: "",
+  sub_depname: "",
+  hosname: "",
+  money: "",
+});
+const goPay = () => {
+  // 需要一些数据
+  dataPay.date = itemNowData.value.toDay;
+  dataPay.doctor = doctor.value.doctor.name;
+  dataPay.sub_depname = doctor.value.sub_depname;
+  dataPay.hosname = doctor.value.hosname;
+  // 获取在某一周就诊的钱
+  dataPay.money = doctor.value.doctor.money;
+  $router.push({ path: "/hospital/register_rule_step2", query: dataPay });
+};
 </script>
 
 <script lang="ts">
 export default {
-  name: 'register_step1'
-}
+  name: "register_step1",
+};
 </script>
 <style scoped lang="scss">
 .wrap {
