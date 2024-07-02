@@ -74,7 +74,7 @@
                 type="primary"
                 size="default"
                 style="width: 140px; height: 40px; font-weight: 700; font-size: 16px"
-                @click="goPay()"
+                @click="goPay('上午')"
               >
                 {{ `剩余：` + itemNowData.morningCount }}
               </el-button>
@@ -103,7 +103,7 @@
               <el-button
                 type="primary"
                 size="default"
-                @click="goPay()"
+                @click="goPay('下午')"
                 style="width: 140px; height: 40px; font-weight: 700; font-size: 16px"
               >
                 {{ `剩余：` + itemNowData.afternoonCount }}</el-button
@@ -164,9 +164,11 @@ const dataPay = reactive({
   sub_depname: "",
   hosname: "",
   money: "",
+  M_or_A: "",
 });
-const goPay = () => {
+const goPay = (item: any) => {
   // 需要一些数据
+  dataPay.M_or_A = item;
   dataPay.date = itemNowData.value.toDay;
   dataPay.doctor = doctor.value.doctor.name;
   dataPay.sub_depname = doctor.value.sub_depname;

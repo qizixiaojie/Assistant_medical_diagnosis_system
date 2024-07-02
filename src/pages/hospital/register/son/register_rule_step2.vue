@@ -95,6 +95,7 @@ const pushData = reactive({
   date: "",
   hosname: "",
   sub_depname: "",
+  M_or_A: "",
 });
 
 const getPaydata = () => {
@@ -105,6 +106,7 @@ const getPaydata = () => {
   pushData.hosname = dataPay.value.hosname;
   pushData.sub_depname = dataPay.value.sub_depname;
   pushData.username = userStore.userInfo.userName;
+  pushData.M_or_A = dataPay.value.M_or_A;
   console.log(pushData);
 };
 const pushDataRules = reactive({

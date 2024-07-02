@@ -45,6 +45,10 @@ export default createRouter({
         }
       ]
     },
+    {
+      path: '/user',
+      component: () => import('@/pages/user/index.vue')
+    },
     //路由重定向
     {
       path: '/',

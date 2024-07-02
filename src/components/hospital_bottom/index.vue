@@ -19,9 +19,10 @@
 <style scoped lang="scss">
 .bottom {
   width: 100%;
-  height: 50px;
+  height: 80px;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
   background-color: #fafafa;
   .content {
     width: 1200px;

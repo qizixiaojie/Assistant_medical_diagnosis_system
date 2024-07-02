@@ -10,7 +10,9 @@
       <div class="right">
         <p class="help">帮助中心</p>
         <!-- 如果有用户的基本信息 -->
-        <p class="login" @click="login" v-if="!userStore.userInfo.userName">登入/注册中心</p>
+        <p class="login" @click="login" v-if="!userStore.userInfo.userName">
+          登入/注册中心
+        </p>
         <!-- 如果没有用户信息 -->
         <p class="login" v-else>
           <el-dropdown>
@@ -22,9 +24,7 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>实名认证</el-dropdown-item>
-                <el-dropdown-item>挂号订单</el-dropdown-item>
-                <el-dropdown-item>就诊人管理</el-dropdown-item>
+                <el-dropdown-item @click="goUser_oder">挂号订单</el-dropdown-item>
                 <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -36,23 +36,27 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import useUserStore from '@/store/modules/interface/user'
-const userStore = useUserStore()
-const $router = useRouter()
+import { useRouter } from "vue-router";
+import useUserStore from "@/store/modules/interface/user";
+const userStore = useUserStore();
+const $router = useRouter();
 //去往首页
 const goHome = () => {
-  $router.push({ path: '/home' })
-}
+  $router.push({ path: "/home" });
+};
 //点击登录与注册按钮的时候弹出对话框
 const login = () => {
-  userStore.visiable = true
-}
+  userStore.visiable = true;
+};
 //点击退出登录清除数据
 const logout = () => {
-  userStore.logout()
-  $router.push({ path: '/home' })
-}
+  userStore.logout();
+  $router.push({ path: "/home" });
+};
+// 去预约表单的页面
+const goUser_oder = () => {
+  $router.push({ path: "/user" });
+};
 </script>
 
 <style scoped lang="scss">
