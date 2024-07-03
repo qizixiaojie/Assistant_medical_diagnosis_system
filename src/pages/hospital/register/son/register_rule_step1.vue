@@ -114,6 +114,19 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <div
+      style="
+        color: rgb(182, 57, 57);
+        font-size: 30px;
+        font-weight: 700;
+        text-align: center;
+      "
+    >
+      <h1>暂无当前医院医生排班信息</h1>
+      <el-empty description="暂无信息 "></el-empty>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -130,6 +143,8 @@ const $route = useRoute();
 // 全部医生数据
 const doctor = ref();
 const getDoctorDetails = async () => {
+  console.log($route.query);
+
   const result: any = await reqHospital_Doctor_Detail($route.query);
   if (result.code == 200) {
     doctor.value = result.data;
