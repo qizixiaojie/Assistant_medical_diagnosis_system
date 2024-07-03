@@ -1,9 +1,10 @@
 <template>
-  <div class="main" v-if="orderData">
+  <div class="main">
     <el-card
       style="min-width: 300px; margin-bottom: 30px"
       v-for="item in orderData"
       :key="item.user_orderID"
+      v-if="orderData"
     >
       <template #header>
         <div class="card-header">
@@ -25,7 +26,17 @@
         <el-button type="primary" @click="cancel(item)">取消预约</el-button>
       </template>
     </el-card>
+    <div v-if="isShow">
+      <div
+        v-if="username"
+        style="color: rgb(182, 57, 57); font-size: 30px; font-weight: 700"
+      >
+        <h1>暂无{{ username }}就诊信息</h1>
+        <el-empty description="暂无信息 "></el-empty>
+      </div>
+    </div>
   </div>
+
   <!-- 弹窗 -->
   <el-dialog v-model="dialogVisible" title="Tips" width="500">
     <span>您确认要取消嘛？</span>
@@ -42,21 +53,24 @@
 import { reqCancelOrder, reqUserGetOrder } from "@/api/user";
 import useUserStore from "@/store/modules/interface/user";
 import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+
 onMounted(() => {
   getData();
 });
 //获取预约订单信息
-const orderData = ref();
-const dialogVisible = ref(false);
-const $router = useRouter();
+const orderData = ref(); //预约信息
+const dialogVisible = ref(false); //是否弹出表单
+const username = ref(""); //登录用户
+const isShow = ref(false); //是否展处没有消息
 const getData = async () => {
   const userStore = useUserStore();
-  console.log(userStore.userInfo.userName);
-
+  username.value = userStore.userInfo.userName;
   const result: any = await reqUserGetOrder(userStore.userInfo.userName);
   orderData.value = result;
-  console.log(orderData.value);
+  console.log(orderData.value.length);
+  if (orderData.value.length == 0) {
+    isShow.value = true;
+  }
 };
 
 //弹出弹窗是否取消预约
