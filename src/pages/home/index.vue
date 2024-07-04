@@ -28,7 +28,7 @@
           layout=" prev, pager, next, jumper,-> ,sizes,total"
           @current-change="currentChange"
           @size-change="sizeChange"
-          :total="32"
+          :total="100"
         />
       </div>
     </el-col>

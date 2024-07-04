@@ -61,6 +61,8 @@ const $router = useRouter();
 //获取当前用户信息
 const $route = useRoute();
 onMounted(async () => {
+  console.log($route.query.hoscode);
+
   await detailStore.getHospital($route.query.hoscode as string);
   detailStore.getHospitalDepart();
 });
