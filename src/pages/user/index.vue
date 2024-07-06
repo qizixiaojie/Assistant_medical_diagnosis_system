@@ -42,7 +42,7 @@
     <span>您确认要取消嘛？</span>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">放回</el-button>
+        <el-button type="primary" @click="dialogVisible = false">返回</el-button>
         <el-button @click="cancelServe()"> 确定取消 </el-button>
       </div>
     </template>
